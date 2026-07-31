@@ -10,10 +10,12 @@ import {
   ItemTitle,
 } from "@/components/ui/item"
 import { MasterLevelChart } from "@/components/ui/masterLevel"
+import Link from "next/link"
 
-export function ExerciseItem({ title, description , masterLevel}: { title: string, description: string,masterLevel:number }) {
+export function ExerciseItem({ exerciseId,title, description , masterLevel}: {exerciseId:string, title: string, description: string,masterLevel:number }) {
   return (
-    <div className="flex w-full max-w-md flex-col gap-6 hover:border-primary/100 hover:shadow-sm transition-all duration-200 cursor-pointer">
+    <Link className="flex w-full max-w-md flex-col gap-6 hover:border-primary hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer"
+     href={`exercise/${exerciseId}`} >
       <Item variant="outline">
         <ItemContent>
           <ItemTitle>{title}</ItemTitle>
@@ -25,6 +27,6 @@ export function ExerciseItem({ title, description , masterLevel}: { title: strin
           <MasterLevelChart masterLevel={masterLevel} />
         </ItemActions>
       </Item>
-    </div>
+    </Link>
   )
 }
