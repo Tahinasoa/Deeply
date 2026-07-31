@@ -1,66 +1,46 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { ExerciseItem } from "@/components/ui/exerciseItem"
+import { Input } from "@/components/ui/input"
 
 export default function Home() {
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>To get started, edit the page.tsx file.</h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    // Wrap everything in a main container to manage overall page spacing and z-indices cleanly
+    <div className="min-h-screen bg-background text-foreground flex flex-col relative pb-24">
+      
+      {/* HEADER: Cleaned up paddings and alignment layout bounds */}
+      <header className="w-full border-b px-6 md:px-12 lg:px-24 py-4 flex flex-col gap-4">
+        {/* Top Navbar Row */}
+        <div className='flex items-center justify-between'>
+          <div className="text-xl font-bold tracking-tight">Deeply</div>
+          <div className="flex items-center gap-3">
+            <span className="text-sm font-medium text-muted-foreground">Tahinasoa</span>
+            <Avatar className="h-8 w-8">
+              <AvatarFallback className="text-xs">T</AvatarFallback>
+            </Avatar>
+          </div>
         </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+        
+        {/* Search Bar Row: Max width constraint applied to avoid edge stretching */}
+        <div className='w-full max-w-md'>
+          <Input placeholder='Search for exercises...' className="w-full bg-muted/40" />
+        </div>
+      </header>
+
+      {/* CARDS SECTION: Unified container alignments perfectly parallel with the header */}
+      <main className='px-6 md:px-12 lg:px-24 py-6 flex-1'>
+        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
+          <ExerciseItem title={"Affine Transformations"} description={"MATH | Geometry"} masterLevel={20} />
+          <ExerciseItem title={"Quadratic Equations"} description={"MATH | Algebra"} masterLevel={75} />
+          <ExerciseItem title={"Limits and Continuity"} description={"MATH | Calculus"} masterLevel={30} />
+          <ExerciseItem title={"Conditional Probability"} description={"MATH | Probability"} masterLevel={90} />
+          <ExerciseItem title={"Vectors and Coordinate Planes"} description={"MATH | Geometry"} masterLevel={15} />
+          <ExerciseItem title={"Systems of Linear Equations"} description={"MATH | Algebra"} masterLevel={45} />
+          <ExerciseItem title={"Derivatives and Variations"} description={"MATH | Calculus"} masterLevel={60} />
+          <ExerciseItem title={"Descriptive Statistics"} description={"MATH | Statistics"} masterLevel={85} />
+          <ExerciseItem title={"Trigonometry in Right Triangles"} description={"MATH | Geometry"} masterLevel={50} />
+          <ExerciseItem title={"Complex Numbers & Graphing"} description={"MATH | Algebra"} masterLevel={65} />
         </div>
       </main>
     </div>
-  );
+  )
 }
