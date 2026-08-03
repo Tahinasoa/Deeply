@@ -1,12 +1,11 @@
 import { notFound } from "next/navigation";
 import { exo, Exercise } from "./mockExercices";
-import ReactMarkdown from 'react-markdown'
-import remarkMath from 'remark-math'
-import remarkGfm from 'remark-gfm'
-import rehypeKatex from "rehype-katex";
-import markdownComponents from "@/components/markdownComponents";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import { MarkdownDocument } from "../markdownDocument";
+import { MasterLevelChart } from "@/components/ui/masterLevel";
+import OpenEvaluationButton from "./evaluationActivities/openEvaluationButton";
+import { EvaluationActivity } from "./evaluationActivities/evaluationActivity";
 
 export default async function Page(props: {
   params: Promise<{ id: string }>
@@ -29,23 +28,26 @@ export default async function Page(props: {
         </Link>
 
         <article className="mt-6">
-          <header className="mb-8 border-b border-border pb-5">
-            <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Exercise
+          <header className="flex mb-8 border-b border-border pb-4 items-start gap-4">
+            <MasterLevelChart masterLevel={65.5} innerRadius={30} outerRadius={40} />
+            <div className="flex flex-col items-start gap-0">
+              <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              cours
             </span>
-            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground mt-1.5">
-              {exercise.title}
-            </h1>
+              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground mt-1.5">
+                {exercise.title}
+              </h1>
+              <div className="text-muted-foreground">
+                <div>Mathématiques | terminal S </div>
+                <div>BACC série C 2023</div>
+              </div>
+            </div>
           </header>
 
           <section className="p-6 sm:p-8 bg-card text-card-foreground border border-border rounded-xl shadow-sm">
-            <ReactMarkdown
-              remarkPlugins={[remarkMath, remarkGfm]}
-              rehypePlugins={[rehypeKatex]}
-              components={markdownComponents}
-            >
-              {exercise.content}
-            </ReactMarkdown>
+            <MarkdownDocument content={exercise.content} />
+            <OpenEvaluationButton />
+            <EvaluationActivity isOpen={true} />
           </section>
         </article>
       </div>

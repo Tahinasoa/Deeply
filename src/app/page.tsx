@@ -37,14 +37,14 @@ export default function Home() {
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
           <ExerciseItem exerciseId={"1"} title={"Affine Transformations"} description={"MATH | Geometry"} masterLevel={20} />
           <ExerciseItem exerciseId={"2"} title={"Quadratic Equations"} description={"MATH | Algebra"} masterLevel={75} />
-          <ExerciseItem exerciseId={"4"} title={"Limits and Continuity"} description={"MATH | Calculus"} masterLevel={30} />
-          <ExerciseItem exerciseId={"5"} title={"Conditional Probability"} description={"MATH | Probability"} masterLevel={90} />
-          <ExerciseItem exerciseId={"6"} title={"Vectors and Coordinate Planes"} description={"MATH | Geometry"} masterLevel={15} />
-          <ExerciseItem exerciseId={"7"} title={"Systems of Linear Equations"} description={"MATH | Algebra"} masterLevel={45} />
-          <ExerciseItem exerciseId={"8"} title={"Derivatives and Variations"} description={"MATH | Calculus"} masterLevel={60} />
-          <ExerciseItem exerciseId={"9"} title={"Descriptive Statistics"} description={"MATH | Statistics"} masterLevel={85} />
-          <ExerciseItem exerciseId={"10"} title={"Trigonometry in Right Triangles"} description={"MATH | Geometry"} masterLevel={50} />
-          <ExerciseItem exerciseId={"11"} title={"Complex Numbers & Graphing"} description={"MATH | Algebra"} masterLevel={65} />
+          <ExerciseItem exerciseId={"3"} title={"Limits and Continuity"} description={"MATH | Calculus"} masterLevel={30} />
+          <ExerciseItem exerciseId={"4"} title={"Conditional Probability"} description={"MATH | Probability"} masterLevel={90} />
+          <ExerciseItem exerciseId={"5"} title={"Vectors and Coordinate Planes"} description={"MATH | Geometry"} masterLevel={15} />
+          <ExerciseItem exerciseId={"6"} title={"Systems of Linear Equations"} description={"MATH | Algebra"} masterLevel={45} />
+          <ExerciseItem exerciseId={"7"} title={"Derivatives and Variations"} description={"MATH | Calculus"} masterLevel={60} />
+          <ExerciseItem exerciseId={"8"} title={"Descriptive Statistics"} description={"MATH | Statistics"} masterLevel={85} />
+          <ExerciseItem exerciseId={"9"} title={"Trigonometry in Right Triangles"} description={"MATH | Geometry"} masterLevel={50} />
+          <ExerciseItem exerciseId={"10"} title={"Complex Numbers & Graphing"} description={"MATH | Algebra"} masterLevel={65} />
         </div>
       </main>
     </div>

@@ -2,6 +2,7 @@ import React from 'react';
 import { Components } from 'react-markdown';
 import Image from 'next/image';
 import Link from 'next/link';
+import TkzTabComponent from './tkzTabComponent';
 
 const markdownComponents: Components = {
   h1: ({ children }) => (
@@ -95,6 +96,11 @@ const markdownComponents: Components = {
         </code>
       );
     }
+    //check if the code must be rendered with tkz-tab-react, if so, render it with the tkz-tab-react component
+    if (className === 'language-tkz-tab') {
+      return <TkzTabComponent content={children} />;
+    }
+
     return (
       <code className={`${className || ''} font-mono text-sm`} {...props}>
         {children}

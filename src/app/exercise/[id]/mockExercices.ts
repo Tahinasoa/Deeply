@@ -9,7 +9,7 @@ export const exo = new Map<string, Exercise>();
 
 exo.set("1", {
   id: "1",
-  title: "Physique : Vecteurs Vitesse et Accélération",
+  title: "Vecteurs Vitesse et Accélération",
   description: "Comprendre la direction et le sens des vecteurs vitesse et accélération lors des phases d'accélération et de freinage d'un véhicule.",
   content: `
 ## 1. Cours : Vitesse et Accélération en Mouvement Rectiligne
@@ -89,7 +89,7 @@ Une échelle de $5\\text{ mètres}$ est appuyée contre un mur vertical. Le bas 
 
 exo.set("3", {
   id: "3",
-  title: "Terminale L Literature Overview",
+  title: "Literature Overview",
   description: "An overview of core literary movements, curriculum authors, and analytical skills for Terminale L.",
   content: `
 
@@ -107,5 +107,53 @@ exo.set("3", {
 * **Dissertation**: Structuring complex argumentative essays.
 * **Synthesis**: Comparing multiple texts across different eras.
 * **Contextualization**: Grounding literature in its political climate.
+`
+});
+
+exo.set("4", {
+  id: "4",
+  title: "Étudier les variations d'une fonction",
+  description:
+    "Comprendre comment construire et interpréter un tableau de variations à partir de l'étude d'une fonction.",
+  content:
+`
+# Étude de la fonction carré
+
+On considère la fonction :
+
+$$
+f(x)=x^2
+$$
+
+Sa dérivée est :
+
+$$
+f'(x)=2x
+$$
+
+Nous allons étudier le signe de la dérivée afin de déterminer les variations de la fonction.
+
+La dérivée s'annule en :
+
+$$
+x=0
+$$
+
+Le tableau de variation est :
+
+\`\`\`tkz-tab
+\\begin{tikzpicture}
+\\tkzTabInit{$x$ / 1 , $f'(x)$ / 1 , $f(x)$ / 2}
+{$-\\infty$, $0$, $+\\infty$}
+\\tkzTabLine{,-,z,+,}
+\\tkzTabVar{+/$+\\infty$, -/$0$, +/$+\\infty$}
+\\end{tikzpicture}
+\`\`\`
+
+On remarque donc que :
+
+- La fonction est décroissante sur $]-\\infty;0]$.
+- La fonction est croissante sur $[0;+\\infty[$.
+- Le minimum est atteint pour $x=0$.
 `
 });

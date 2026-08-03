@@ -24,7 +24,7 @@ export function ExerciseItem({ exerciseId,title, description , masterLevel}: {ex
           </ItemDescription>
         </ItemContent>
         <ItemActions>
-          <MasterLevelChart masterLevel={masterLevel} />
+          <MasterLevelChart masterLevel={masterLevel} innerRadius={17} outerRadius={25} />
         </ItemActions>
       </Item>
     </Link>

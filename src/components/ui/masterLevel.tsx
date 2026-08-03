@@ -11,7 +11,7 @@ const chartData = [
 
 const chartConfig = {} satisfies ChartConfig
 
-export function MasterLevelChart({masterLevel}:{masterLevel:number}) {
+export function MasterLevelChart({masterLevel, innerRadius, outerRadius}:{masterLevel:number, innerRadius: number, outerRadius: number}) {
 const chartData = [
     { type: "Passed", value : masterLevel, fill: "var(--chart-4)" },
     { type: "unPassed", value: 100 - masterLevel, fill: "var(--muted)" },
@@ -19,18 +19,18 @@ const chartData = [
 
     return (
         /* Visual Anchor: Strict micro dimensions */
-        <div className="w-[50px] h-[50px] flex items-center justify-center ">
+        <div className="flex items-center justify-center " style={{ width: `${2 * outerRadius}px`, height: `${2 * outerRadius}px` }}>
             <ChartContainer
                 config={chartConfig}
                 className="w-full h-full aspect-square"
             >
-                <PieChart width={50} height={50}>
+                <PieChart width={2 * outerRadius} height={2 * outerRadius}>
                     <Pie
                         data={chartData}
                         dataKey="value"
                         nameKey="type"
-                        innerRadius={17}  
-                        outerRadius={25}
+                        innerRadius={innerRadius}  
+                        outerRadius={outerRadius}
                         strokeWidth={0}
                         startAngle={90}
                         endAngle={-270}
