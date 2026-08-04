@@ -19,7 +19,7 @@ Authentification standard.
 - Filtres : niveau, matière, thème, type d'exercice.
 - Suggestions d'exercices recommandés.
 
-### Fiche d'exercice
+### Fiche d'exercice 
 - Matière, thème, niveau.
 - Source (document dont l'exercice est issu — ex. *Bacc 2023, Mathématiques, Partie A*).
 - Niveau de maîtrise actuel (MVP : pourcentage de réussite).
