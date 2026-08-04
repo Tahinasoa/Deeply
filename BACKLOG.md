@@ -4,7 +4,8 @@ Here is the translated backlog using standard software engineering terminology:
 
 ## Phase 1 — Dashboard (Mock Data)
 
-* [ ] Project setup (stack, folder structure, routing)
+* [x] Project setup (stack, folder structure, routing)
+* [x] Mockup/dummy app.
 * [ ] `/login` — Login screen (hardcoded auth for MVP, single test user)
 * [ ] `/` — Dashboard
 * [ ] Exercise list (mocked in local JSON, no database for now)
