@@ -2,10 +2,10 @@ import { notFound } from "next/navigation";
 import { exo, Exercise } from "./mockExercices";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import { MarkdownDocument } from "../markdownDocument";
+import { MarkdownContent } from "../markdownContent";
 import { MasterLevelChart } from "@/components/ui/masterLevel";
 import OpenEvaluationButton from "./evaluationActivities/openEvaluationButton";
-import { EvaluationActivity } from "./evaluationActivities/evaluationActivity";
+import {  EvaluationActivityDialog } from "./evaluationActivities/evaluationActivityDialog";
 
 export default async function Page(props: {
   params: Promise<{ id: string }>
@@ -45,9 +45,10 @@ export default async function Page(props: {
           </header>
 
           <section className="p-6 sm:p-8 bg-card text-card-foreground border border-border rounded-xl shadow-sm">
-            <MarkdownDocument content={exercise.content} />
-            <OpenEvaluationButton />
-            <EvaluationActivity isOpen={true} />
+            <MarkdownContent >
+              {exercise.content}
+            </MarkdownContent>
+            <EvaluationActivityDialog />
           </section>
         </article>
       </div>
