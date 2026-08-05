@@ -4,8 +4,21 @@ import { ExerciseItem } from "@/components/exerciseItem"
 import { Input } from "@/components/ui/input"
 import SearchInput from '@/components/ui/searchInput'
 import { ThemeSwitch } from '@/components/themeSwitch'
+import { useMemo } from 'react'
+import Repository from '@/lib/database/mock/db'
+import { LearningSessionProgress, LearningSessionSummary } from '@/types/type'
 
-export default function Home() {
+
+export default async function Home() {
+  const repo = new Repository() ;
+  const userId = "user" ;
+  const sessions:LearningSessionSummary[] = await repo.getLearningSessionsSummaries() ;
+  const progress:LearningSessionProgress[] = await repo.getLearningSessionProgress(userId) ;
+  const sessionComponents = sessions.map(session=>{
+    const prog = progress.find((p)=>(p.learningSessionId===session.id))?.masteryLevel || 0;
+    return <ExerciseItem key={session.id} exerciseId={session.id} title={session.title} description={session.description || ""} masterLevel={prog} />
+  })
+
   return (
     // Wrap everything in a main container to manage overall page spacing and z-indices cleanly
     <div className="min-h-screen bg-background text-foreground flex flex-col relative pb-24">
@@ -35,16 +48,7 @@ export default function Home() {
       {/* CARDS SECTION: Unified container alignments perfectly parallel with the header */}
       <main className='px-6 md:px-12 lg:px-24 py-6 flex-1'>
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
-          <ExerciseItem exerciseId={"1"} title={"Affine Transformations"} description={"MATH | Geometry"} masterLevel={20} />
-          <ExerciseItem exerciseId={"2"} title={"Quadratic Equations"} description={"MATH | Algebra"} masterLevel={75} />
-          <ExerciseItem exerciseId={"3"} title={"Limits and Continuity"} description={"MATH | Calculus"} masterLevel={30} />
-          <ExerciseItem exerciseId={"4"} title={"Conditional Probability"} description={"MATH | Probability"} masterLevel={90} />
-          <ExerciseItem exerciseId={"5"} title={"Vectors and Coordinate Planes"} description={"MATH | Geometry"} masterLevel={15} />
-          <ExerciseItem exerciseId={"6"} title={"Systems of Linear Equations"} description={"MATH | Algebra"} masterLevel={45} />
-          <ExerciseItem exerciseId={"7"} title={"Derivatives and Variations"} description={"MATH | Calculus"} masterLevel={60} />
-          <ExerciseItem exerciseId={"8"} title={"Descriptive Statistics"} description={"MATH | Statistics"} masterLevel={85} />
-          <ExerciseItem exerciseId={"9"} title={"Trigonometry in Right Triangles"} description={"MATH | Geometry"} masterLevel={50} />
-          <ExerciseItem exerciseId={"10"} title={"Complex Numbers & Graphing"} description={"MATH | Algebra"} masterLevel={65} />
+          {sessionComponents}
         </div>
       </main>
     </div>

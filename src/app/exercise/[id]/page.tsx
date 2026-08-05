@@ -1,18 +1,28 @@
 import { notFound } from "next/navigation";
-import { exo, Exercise } from "./mockExercices";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { MarkdownContent } from "../markdownContent";
 import { MasterLevelChart } from "@/components/ui/masterLevel";
-import OpenEvaluationButton from "./evaluationActivities/openEvaluationButton";
 import {  EvaluationActivityDialog } from "./evaluationActivities/evaluationActivityDialog";
+import Repository from "@/lib/database/mock/db";
+import { useUserId } from "@/lib/authentification/hook";
 
 export default async function Page(props: {
   params: Promise<{ id: string }>
 }) {
   const params = await props.params;
-  const exercise = exo.get(params.id);
-  if (!exercise) {
+  const sessionId  = params.id ;
+  const repo = new Repository() ;
+  const userId = useUserId() ;
+  const [learningSession,_progress, documents] = await Promise.all([
+    repo.getLearningSessionsSummary(sessionId),
+    repo.getOneLearningSessionProgress(userId, sessionId),
+    repo.getLearningSessionDocuments(sessionId)
+  ]
+  ) ;
+  const progress = _progress || "0" ;
+
+  if (!learningSession || !documents) {
     notFound();
   }
 
@@ -32,21 +42,21 @@ export default async function Page(props: {
             <MasterLevelChart masterLevel={65.5} innerRadius={30} outerRadius={40} />
             <div className="flex flex-col items-start gap-0">
               <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              cours
+              {learningSession.type}
             </span>
               <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground mt-1.5">
-                {exercise.title}
+                {learningSession.title}
               </h1>
               <div className="text-muted-foreground">
-                <div>Mathématiques | terminal S </div>
-                <div>BACC série C 2023</div>
+                <div>{learningSession.topic} | {learningSession.grades.join(' , ')} </div>
+                {learningSession.description ? <div>{learningSession.description}</div> : null}
               </div>
             </div>
           </header>
 
           <section className="p-6 sm:p-8 bg-card text-card-foreground border border-border rounded-xl shadow-sm">
             <MarkdownContent >
-              {exercise.content}
+              {documents.document}
             </MarkdownContent>
             <EvaluationActivityDialog />
           </section>
