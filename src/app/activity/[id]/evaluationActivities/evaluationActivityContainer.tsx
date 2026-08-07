@@ -82,7 +82,7 @@ export function EvaluationActivityContainer({ activities, onClose }: { activitie
           })
         }>
         {/* card */}
-        <div className=" bg-white p-6 rounded-2xl shadow-xl h-10/12 max-w-lg w-full m-4">
+        <div className=" bg-background text-foreground p-6 rounded-2xl shadow-xl h-10/12 max-w-lg w-full m-4">
 
           {/* activity content*/}
           <div className={
@@ -91,13 +91,39 @@ export function EvaluationActivityContainer({ activities, onClose }: { activitie
               "hidden": feedbackvisible
             })
           }>
-
             {/* header */}
-            <div className="flex-none pr-8 flex flex-row items-center justify-between text-base font-semibold ">
+            <div className="flex-none flex flex-row items-center justify-between gap-4 pb-4 border-b border-border">
 
-              <span className="flex gap-0.5 ">Activité : <ArrowLeft onClick={() => { handlePrev(currentActivityIndex) }} />{currentActivityIndex + 1}/{totalActivity}<ArrowRight onClick={() => { handleNext(currentActivityIndex) }} /></span>
-              <span className="text-sm font-normal text-muted-foreground">
-                Bonne réponse : <span className="font-medium text-foreground">{correctAnswerCount}/{totalActivity}</span>
+              {/* navigation : pill with ghost button */}
+              <div className="flex items-center gap-1 rounded-full border border-border bg-muted/40 pl-3 pr-1 py-1">
+                <span className="text-sm font-medium text-muted-foreground mr-1">Activité</span>
+                <Button
+                  variant="ghost"
+                  size="icon-xs"
+                  onClick={() => { handlePrev(currentActivityIndex) }}
+                  aria-label="Activité précédente"
+                >
+                  <ArrowLeft />
+                </Button>
+                <span className="text-sm font-semibold tabular-nums px-0.5">
+                  {currentActivityIndex + 1}/{totalActivity}
+                </span>
+                <Button
+                  variant="ghost"
+                  size="icon-xs"
+                  onClick={() => { handleNext(currentActivityIndex) }}
+                  aria-label="Activité suivante"
+                >
+                  <ArrowRight />
+                </Button>
+              </div>
+
+              {/* score */}
+              <span className="text-sm text-muted-foreground whitespace-nowrap">
+                Bonne réponse :{" "}
+                <span className="font-semibold text-foreground tabular-nums">
+                  {correctAnswerCount}/{totalActivity}
+                </span>
               </span>
             </div>
 
@@ -120,10 +146,10 @@ export function EvaluationActivityContainer({ activities, onClose }: { activitie
               totalActivity={totalActivity}
               totalPassed={correctAnswerCount}
               onBacktoActivity={function (): void {
-                setFeedbackvisible(false) ;
+                setFeedbackvisible(false);
               }}
               onBacktoDocument={function (): void {
-                setVisible(false) ;
+                setVisible(false);
               }} /> : null}
         </div>
 

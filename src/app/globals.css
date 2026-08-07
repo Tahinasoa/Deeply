@@ -177,6 +177,21 @@ body {
   --sidebar-accent-foreground: oklch(0.92 0.05 150);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.60 0.15 260);
+
+    /* Correct (Green naturel + Light Text) */
+  --correct: oklch(0.32 0.05 150);
+  --correct-foreground: oklch(0.85 0.10 150);
+  --correct-border: oklch(0.55 0.13 150);
+
+  /* Incorrect (Vibrant Red/Coral + Light Text) */
+  --incorrect: oklch(0.33 0.07 25);
+  --incorrect-foreground: oklch(0.87 0.13 25);
+  --incorrect-border: oklch(0.60 0.21 25);
+
+  /* Selected / Pending (Solid Blue Accent) */
+  --selected: oklch(0.33 0.06 255);
+  --selected-foreground: oklch(0.87 0.12 255);
+  --selected-border: oklch(0.62 0.20 255);
 }
 
 @layer base {

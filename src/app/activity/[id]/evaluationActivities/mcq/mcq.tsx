@@ -25,15 +25,15 @@ export function MCQ({ data, onComplete }: { data: MCQActivity, onComplete: (pass
         if (showExplanation) {
             if (i === selection) {
                 if (opt.isCorrect) {
-                    classname = "bg-correct";
+                    classname = "bg-correct text-correct";
                 }
                 else {
-                    classname = "bg-incorrect"
+                    classname = "bg-incorrect text-incorrect"
                 }
             }
             else {
                 if (opt.isCorrect) {
-                    classname = "bg-correct"
+                    classname = "bg-correct text-incorrect"
                 }
             }
         }
