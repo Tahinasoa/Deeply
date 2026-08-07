@@ -3,6 +3,7 @@ import { MCQActivity } from "@/types/type";
 import { MarkdownContent } from "@/components/markdownContent";
 import { cn } from "@/lib/utils";
 import { useRef, useState } from "react";
+import { AnswerBadge } from "@/components/answerBadge";
 
 
 
@@ -22,28 +23,22 @@ export function MCQ({ data, onComplete }: { data: MCQActivity, onComplete: (pass
 
     const options = data.options.map((opt, i) => {
         let classname = "";
-        if (showExplanation) {
-            if (i === selection) {
-                if (opt.isCorrect) {
-                    classname = "bg-correct text-correct";
-                }
-                else {
-                    classname = "bg-incorrect text-incorrect"
-                }
-            }
-            else {
-                if (opt.isCorrect) {
-                    classname = "bg-correct text-incorrect"
-                }
-            }
+        const isCorrect = showExplanation && opt.isCorrect;
+        const isIncorrect = showExplanation && i === selection && !opt.isCorrect
+
+        if (isCorrect) {
+            classname = "bg-correct text-correct";
         }
-        ;
+        else if (isIncorrect) {
+            classname = "bg-incorrect text-incorrect"
+        }
 
         return <div
             onClick={() => { handleSelection(i) }}
             key={i}
-            className={cn(classname, "w-full rounded-lg border border-border/60 px-4 py-3 text-sm cursor-pointer transition-colors hover:border-primary [&_p]:m-0 shadow-sm")}
+            className={cn(classname, "relative w-full rounded-lg border border-border/60 px-4 py-3 text-sm cursor-pointer transition-colors hover:border-primary [&_p]:m-0 shadow-sm")}
         >
+            <AnswerBadge isCorrect={isCorrect} isIncorrect={isIncorrect} />
             <MarkdownContent>{opt.text}</MarkdownContent>
         </div>
     });
