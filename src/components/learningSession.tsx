@@ -1,6 +1,5 @@
 import { BadgeCheckIcon, ChevronRightIcon } from "lucide-react"
 
-import { Button } from "@/components/ui/button"
 import {
   Item,
   ItemActions,

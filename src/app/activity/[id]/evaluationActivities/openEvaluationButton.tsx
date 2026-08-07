@@ -32,7 +32,7 @@ function OpenEvaluationButton({ onClick }: { onClick?: () => void }) {
         <div className="flex justify-end items-end">
             {fixedPosition && (
                 <div className="invisible">
-                    <Button>
+                    <Button variant="default-square">
                         Auto Évaluation
                     </Button>
                 </div>
@@ -42,7 +42,8 @@ function OpenEvaluationButton({ onClick }: { onClick?: () => void }) {
 
             <Button
                 onClick={onClick}
-                className={"rounded-md " + (fixedPosition ? "fixed bottom-4 right-4" : "")}
+                variant="default-square"
+                className={(fixedPosition ? "fixed" : "")}
             >
                 Auto Évaluation
             </Button>
