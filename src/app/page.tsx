@@ -1,5 +1,4 @@
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
-import { ExerciseItem } from "@/components/exerciseItem"
 
 import { Input } from "@/components/ui/input"
 import SearchInput from '@/components/ui/searchInput'
@@ -7,6 +6,7 @@ import { ThemeSwitch } from '@/components/themeSwitch'
 import { useMemo } from 'react'
 import Repository from '@/lib/database/mock/db'
 import { LearningSessionProgress, LearningSessionSummary } from '@/types/type'
+import { LearningSessionItem } from '@/components/learningSession'
 
 
 export default async function Home() {
@@ -16,7 +16,7 @@ export default async function Home() {
   const progress:LearningSessionProgress[] = await repo.getLearningSessionProgress(userId) ;
   const sessionComponents = sessions.map(session=>{
     const prog = progress.find((p)=>(p.learningSessionId===session.id))?.masteryLevel || 0;
-    return <ExerciseItem key={session.id} exerciseId={session.id} title={session.title} description={session.description || ""} masterLevel={prog} />
+    return <LearningSessionItem key={session.id} exerciseId={session.id} title={session.title} description={session.description || ""} masteryLevel={prog} />
   })
 
   return (

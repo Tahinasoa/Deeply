@@ -11,10 +11,10 @@ const chartData = [
 
 const chartConfig = {} satisfies ChartConfig
 
-export function MasterLevelChart({masterLevel, innerRadius, outerRadius}:{masterLevel:number, innerRadius: number, outerRadius: number}) {
+export function MasteryLevelChart({masteryLevel, innerRadius, outerRadius}:{masteryLevel:number, innerRadius: number, outerRadius: number}) {
 const chartData = [
-    { type: "Passed", value : masterLevel, fill: "var(--chart-4)" },
-    { type: "unPassed", value: 100 - masterLevel, fill: "var(--muted)" },
+    { type: "Passed", value : masteryLevel, fill: "var(--chart-4)" },
+    { type: "unPassed", value: 100 - masteryLevel, fill: "var(--muted)" },
 ]
 
     return (
@@ -50,7 +50,7 @@ const chartData = [
                                                 y={viewBox.cy}
                                                 className="fill-foreground text-[10px] font-bold tracking-tighter"
                                             >
-                                                {masterLevel}%
+                                                {masteryLevel}%
                                             </tspan>
                                         </text>
                                     )

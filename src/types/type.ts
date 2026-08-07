@@ -30,14 +30,32 @@ export const zActivityType = z.literal([
 ]);
 export type ActivityType = z.infer<typeof zActivityType>
 
+
 export const zActivityBase = z.object({
   id: z.string(),
+  learningSessionId : z.string(),
   type: zActivityType,
   anchorQuestion: z.string(),
-  statement: z.string(),
+  instruction: z.string(),
   explanation: z.string().optional(),
 });
+
 export type ActivityBase = z.infer<typeof zActivityBase>
+
+export const zMCQOption = z.object({
+  text : z.string(),
+  isCorrect : z.boolean()
+}) ;
+export type MCQOption = z.infer<typeof zMCQOption> ;
+export const zMCQActivity = zActivityBase.extend({
+  type : z.literal("mcq") ,
+  options : zMCQOption.array()
+}) ;
+
+export type MCQActivity = z.infer<typeof zMCQActivity> ;
+
+export const zActivity = z.discriminatedUnion("type",[zMCQActivity]) ;
+export type Activity = z.infer<typeof zActivity> ;
 
 export const zAssessmentStatus = z.union([
   z.literal("not_assessed"),

@@ -1,7 +1,8 @@
-import { LearningSessionDocument, LearningSessionProgress, LearningSessionSummary } from "@/types/type";
+import { Activity, LearningSessionDocument, LearningSessionProgress, LearningSessionSummary } from "@/types/type";
 import { mockSessionSummary } from "./mockSession";
 import { mockSessionProgress } from "./mockProgress";
 import { mockLearningSessionDocuments } from "./mockSessionDocument";
+import { mockActivitiesMCQ } from "./mockmcq";
 
 class Repository {
     async getLearningSessionsSummaries(): Promise<LearningSessionSummary[]> {
@@ -38,6 +39,12 @@ class Repository {
     async getOneLearningSessionProgress(userId: string, sessionId: string): Promise<LearningSessionProgress | undefined> {
         const results = await this.getLearningSessionProgress(userId, sessionId);
         return results[0];
+    }
+    async getActivities(sessionId:string) :Promise<Activity[]>{
+        const results = mockActivitiesMCQ.filter(a=>a.learningSessionId===sessionId) ;
+        return new Promise((resolve)=>{
+            setTimeout(()=>{resolve(results)}, 300) ;
+        })
     }
 }
 

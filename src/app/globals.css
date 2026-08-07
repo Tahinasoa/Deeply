@@ -13,9 +13,10 @@
 .katex {
   line-height: normal;
 }
+
 .katex {
   line-height: normal !important;
-  font-size: 1.1em; /* optional, matches surrounding text better */
+  font-size: 1.1em !important;
 }
 
 .katex-display {
@@ -31,7 +32,8 @@
 html {
   height: 100%;
 }
-body{
+
+body {
   min-height: 100%;
 }
 
@@ -69,6 +71,20 @@ body{
   --color-card: var(--card);
   --color-foreground: var(--foreground);
   --color-background: var(--background);
+  /* Custom color for interactive activities*/
+  --color-correct: var(--correct);
+  --color-correct-foreground: var(--correct-foreground);
+  --color-correct-border: var(--correct-border);
+
+  --color-incorrect: var(--incorrect);
+  --color-incorrect-foreground: var(--incorrect-foreground);
+  --color-incorrect-border: var(--incorrect-border);
+
+  --color-selected: var(--selected);
+  --color-selected-foreground: var(--selected-foreground);
+  --color-selected-border: var(--selected-border);
+  /*  */
+
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -91,7 +107,7 @@ body{
   --secondary-foreground: oklch(0.30 0.05 260);
   --muted: oklch(0.97 0.01 245);
   --muted-foreground: oklch(0.55 0.03 260);
-  --accent: oklch(0.93 0.07 150);            
+  --accent: oklch(0.93 0.07 150);
   --accent-foreground: oklch(0.28 0.09 150);
   --destructive: oklch(0.577 0.245 27.325);
   --border: oklch(0.90 0.02 250);
@@ -102,7 +118,7 @@ body{
   --chart-3: oklch(0.546 0.245 262.881);
   --chart-4: oklch(0.488 0.243 264.376);
   --chart-5: oklch(0.424 0.199 265.638);
-  --radius: 0.4rem;                         
+  --radius: 0.4rem;
   --sidebar: oklch(0.97 0.02 250);
   --sidebar-foreground: oklch(0.22 0.03 260);
   --sidebar-primary: oklch(0.55 0.20 260);
@@ -111,16 +127,32 @@ body{
   --sidebar-accent-foreground: oklch(0.28 0.09 150);
   --sidebar-border: oklch(0.90 0.02 250);
   --sidebar-ring: oklch(0.65 0.15 260);
+
+  /* Custom color for interactive activities */
+/* Correct (Crisp Green + Dark Text) */
+  --correct: oklch(0.92 0.12 145);
+  --correct-foreground: oklch(0.22 0.15 145);
+  --correct-border: oklch(0.48 0.20 145);
+
+  /* Incorrect (Vibrant Red/Coral + Dark Text) */
+  --incorrect: oklch(0.91 0.11 25);
+  --incorrect-foreground: oklch(0.25 0.16 25);
+  --incorrect-border: oklch(0.50 0.22 25);
+
+  /* Selected / Pending (Solid Blue Accent) */
+  --selected: oklch(0.93 0.10 255);
+  --selected-foreground: oklch(0.22 0.16 255);
+  --selected-border: oklch(0.52 0.22 255);
 }
 
 .dark {
-  --background: oklch(0.17 0.025 260);      
+  --background: oklch(0.17 0.025 260);
   --foreground: oklch(0.96 0.01 250);
   --card: oklch(0.23 0.03 260);
   --card-foreground: oklch(0.96 0.01 250);
   --popover: oklch(0.23 0.03 260);
   --popover-foreground: oklch(0.96 0.01 250);
-  --primary: oklch(0.66 0.17 260);          
+  --primary: oklch(0.66 0.17 260);
   --primary-foreground: oklch(0.16 0.02 260);
   --secondary: oklch(0.29 0.03 260);
   --secondary-foreground: oklch(0.95 0.01 250);
@@ -151,11 +183,12 @@ body{
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
+
   html {
     @apply font-sans;
   }
 }
-

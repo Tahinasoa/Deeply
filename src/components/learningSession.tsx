@@ -9,13 +9,13 @@ import {
   ItemMedia,
   ItemTitle,
 } from "@/components/ui/item"
-import { MasterLevelChart } from "@/components/ui/masterLevel"
+import { MasteryLevelChart } from "@/components/ui/masteryLevel"
 import Link from "next/link"
 
-export function ExerciseItem({ exerciseId,title, description , masterLevel}: {exerciseId:string, title: string, description: string,masterLevel:number }) {
+export function LearningSessionItem({ exerciseId,title, description , masteryLevel}: {exerciseId:string, title: string, description: string,masteryLevel:number }) {
   return (
     <Link className="flex w-full max-w-md flex-col gap-6 hover:border-primary hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer"
-     href={`exercise/${exerciseId}`} >
+     href={`activity/${exerciseId}`} >
       <Item variant="outline">
         <ItemContent>
           <ItemTitle>{title}</ItemTitle>
@@ -24,7 +24,7 @@ export function ExerciseItem({ exerciseId,title, description , masterLevel}: {ex
           </ItemDescription>
         </ItemContent>
         <ItemActions>
-          <MasterLevelChart masterLevel={masterLevel} innerRadius={17} outerRadius={25} />
+          <MasteryLevelChart masteryLevel={masteryLevel} innerRadius={17} outerRadius={25} />
         </ItemActions>
       </Item>
     </Link>

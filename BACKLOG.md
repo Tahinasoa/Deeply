@@ -9,8 +9,6 @@
 
 * [x] `/` — Dashboard : list of available session (featuring search, no filter)
 * [x] session page 
-* [ ] Filters: grade, subject, topic, type
-
 
 * [ ] MCQ as first activity.
 
@@ -18,6 +16,7 @@
 ## [ ] Phase 2 — Real Data
 * [ ] real Postgresql database.
 * [ ] CLI  : generation from raw text, integration to database
+* [ ] Filters: grade, subject, topic, type
 
 
 ## [ ] Phase 3 — Additional Activity Type
