@@ -39,11 +39,10 @@ function OpenEvaluationButton({ onClick }: { onClick?: () => void }) {
             )}
 
             <div ref={triggerRef} className="h-px w-px" />
-
             <Button
                 onClick={onClick}
                 variant="default-square"
-                className={(fixedPosition ? "fixed" : "")}
+                className={(fixedPosition ? "fixed bottom-4 right-4" : "")}
             >
                 Auto Évaluation
             </Button>
