@@ -48,4 +48,4 @@ class Repository {
     }
 }
 
-export default Repository;
+export default Repository; 
