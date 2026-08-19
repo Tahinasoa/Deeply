@@ -1,4 +1,4 @@
-import { Activity, LearningSessionDocument, LearningSessionProgress, LearningSessionSummary } from "@/types/type";
+import { Activity, LearningSessionDocument, LearningSessionProgress, LearningSessionSummary } from "@/types/learning-session";
 import { mockSessionSummary } from "./mockSession";
 import { mockSessionProgress } from "./mockProgress";
 import { mockLearningSessionDocuments } from "./mockSessionDocument";

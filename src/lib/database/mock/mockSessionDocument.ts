@@ -1,4 +1,4 @@
-import type { LearningSessionDocument } from "@/types/type";
+import type { LearningSessionDocument } from "@/types/learning-session";
 
 export const mockLearningSessionDocuments: LearningSessionDocument[] = [
   {

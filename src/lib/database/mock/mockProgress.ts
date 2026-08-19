@@ -1,4 +1,4 @@
-import { LearningSessionProgress } from '@/types/type';
+import { LearningSessionProgress } from '@/types/learning-session';
 import { z } from 'zod';
 
 

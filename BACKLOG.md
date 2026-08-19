@@ -3,31 +3,31 @@
 * [x] Project setup (stack, folder structure, routing)
 * [x] dummy app
 
-## [ ] Phase 1 — Dashboard (Mock Data)
+## [x] Phase 1 — Dashboard (Mock Data)
 * [x] defined zod types for shared object (database, dashboard, session page, activity page).
 * [x] mock database.
 
 * [x] `/` — Dashboard : list of available session (featuring search, no filter)
 * [x] session page 
 
-* [ ] MCQ as first activity.
+* [x] MCQ as first activity.
 
+## [ ] Phase 2 — Authentification system
+* [ ] Authentification system, connected with a database.
 
-## [ ] Phase 2 — Real Data
+## [ ] Phase 3 — Real Data
 * [ ] real Postgresql database.
 * [ ] CLI  : generation from raw text, integration to database
 * [ ] Filters: grade, subject, topic, type
 
 
-## [ ] Phase 3 — Additional Activity Type
+## [ ] Phase 4 — Additional Activity Type
 
 * [ ] MCQ with multiple correct answers
 * [ ] fill-in-the-blank (free text)
 * [ ] fill-in-the-blank (word bank)
 * [ ] item reordering
 
-## [ ] Phase 4 — Login / Auth
-* [ ] login page
 
 ## [ ] Phase 5 — Pedagogical Features
 * [ ] integrate pedagogical objectives to the session and activity types

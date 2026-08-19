@@ -5,13 +5,15 @@ import SearchInput from '@/components/ui/searchInput'
 import { ThemeSwitch } from '@/components/themeSwitch'
 import { useMemo } from 'react'
 import Repository from '@/lib/database/mock/db'
-import { LearningSessionProgress, LearningSessionSummary } from '@/types/type'
+import { LearningSessionProgress, LearningSessionSummary } from '@/types/learning-session'
 import { LearningSessionItem } from '@/components/learningSession'
+
 
 
 export default async function Home() {
   const repo = new Repository() ;
   const userId = "user" ;
+  const userName = "Default" ;
   const sessions:LearningSessionSummary[] = await repo.getLearningSessionsSummaries() ;
   const progress:LearningSessionProgress[] = await repo.getLearningSessionProgress(userId) ;
   const sessionComponents = sessions.map(session=>{
@@ -33,7 +35,7 @@ export default async function Home() {
               <Avatar className="h-8 w-8">
                 <AvatarFallback className="text-xs">T</AvatarFallback>
               </Avatar>
-              <span className="text-sm font-medium text-muted-foreground">Tahinasoa</span>
+              <span className="text-sm font-medium text-muted-foreground">{userName}</span>
             </div>
             <ThemeSwitch />
           </div>

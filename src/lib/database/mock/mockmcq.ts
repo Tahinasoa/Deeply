@@ -1,6 +1,6 @@
 
 
-import { MCQActivity } from "@/types/type";
+import { MCQActivity } from "@/types/learning-session";
 
 
 export const mockActivitiesMCQ: MCQActivity[] = [

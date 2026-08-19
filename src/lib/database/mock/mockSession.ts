@@ -1,4 +1,4 @@
-import { LearningSessionSummary } from "@/types/type";
+import { LearningSessionSummary } from "@/types/learning-session";
 
 export const mockSessionSummary: LearningSessionSummary[] = [
   {

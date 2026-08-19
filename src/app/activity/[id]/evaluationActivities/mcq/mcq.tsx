@@ -1,5 +1,5 @@
 
-import { MCQActivity } from "@/types/type";
+import { MCQActivity } from "@/types/learning-session";
 import { MarkdownContent } from "@/components/markdownContent";
 import { cn } from "@/lib/utils";
 import { useRef, useState } from "react";
