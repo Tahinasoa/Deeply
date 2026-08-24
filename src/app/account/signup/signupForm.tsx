@@ -1,6 +1,6 @@
 'use client'
 
-import type { ComponentProps } from "react" // FIX 1: import manquant pour React.ComponentProps
+import type { ComponentProps } from "react"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -10,28 +10,26 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
-import { Eye, EyeOff, Loader2 } from "lucide-react"
+import { CircleAlert, Eye, EyeOff, Loader2 } from "lucide-react"
 
 import { Input } from "@/components/ui/input"
 import { Field, FieldDescription, FieldGroup, FieldLabel } from "@/components/ui/field"
 import Link from "next/link"
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group"
-import { useState } from "react"
+import { useActionState, useState } from "react"
+import { createUserAction } from "./createUserAction"
+import { timeStamp } from "console"
 
 export default function SignupForm({
     className,
     ...props
 }: ComponentProps<"div">) {
     const [showPwd, setShowPwd] = useState<boolean>(false);
-    const [formState, setFormState] = useState<"INPUT" | "PENDING">("INPUT");
+    const [state, formAction, isPending] = useActionState(createUserAction, null);
+    const formKey = state?.timestamp || 'initial' ; //this is use to define an key so component is remounted after each submit.
 
     function handleTooglePwdVisibility() {
         setShowPwd(!showPwd);
-    }
-
-    function handleSubmit(e: React.FormEvent) {
-        e.preventDefault(); // FIX 6: évite le rechargement de page (submit HTML natif)
-        setFormState("PENDING");
     }
 
     return (
@@ -41,8 +39,7 @@ export default function SignupForm({
                     <CardTitle>Create your account</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    {/* on met le handler sur le form plutôt que sur le bouton, plus correct sémantiquement */}
-                    <form onSubmit={handleSubmit}>
+                    <form key={formKey} action={formAction}>
                         <FieldGroup>
                             <Field>
                                 <FieldLabel>Role</FieldLabel>
@@ -53,7 +50,7 @@ export default function SignupForm({
                                             type="radio"
                                             name="role"
                                             value="STUDENT"
-                                            defaultChecked
+                                            defaultChecked={state?.role !== 'TEACHER'}
                                             required
                                         />
                                         <FieldLabel htmlFor="student_role">Student</FieldLabel>
@@ -65,6 +62,7 @@ export default function SignupForm({
                                             type="radio"
                                             name="role"
                                             value="TEACHER"
+                                            defaultChecked={state?.role === 'TEACHER'}
                                             required
                                         />
                                         <FieldLabel htmlFor="teacher_role">Teacher</FieldLabel>
@@ -75,18 +73,21 @@ export default function SignupForm({
                                 <FieldLabel htmlFor="pseudo">Pseudo *</FieldLabel>
                                 <Input
                                     id="pseudo"
+                                    name="pseudo"
                                     type="text"
                                     placeholder="Pseudo"
+                                    defaultValue={state?.pseudo}
                                     required
                                 />
                             </Field>
                             <Field>
-                                {/* FIX 2: htmlFor="pseudo" -> "full_name" */}
                                 <FieldLabel htmlFor="full_name">Full Name *</FieldLabel>
                                 <Input
                                     id="full_name"
+                                    name="full_name"
                                     type="text"
                                     placeholder="Full Name"
+                                    defaultValue={state?.fullName}
                                     required
                                 />
                             </Field>
@@ -95,11 +96,13 @@ export default function SignupForm({
                                 <InputGroup>
                                     <InputGroupInput
                                         type={showPwd ? "text" : "password"}
-                                        id="password" // FIX 3: id cohérent avec le htmlFor du label
-                                        placeholder="Password" // FIX 4: placeholder cohérent
+                                        id="password"
+                                        name="password"
+                                        defaultValue={state?.password}
+                                        required
+                                        placeholder="Password"
                                     />
                                     <InputGroupAddon align="inline-end">
-                                        {/* FIX 5: icônes inversées + FIX 7: bouton accessible au clavier */}
                                         <button
                                             type="button"
                                             onClick={handleTooglePwdVisibility}
@@ -110,16 +113,22 @@ export default function SignupForm({
                                     </InputGroupAddon>
                                 </InputGroup>
                             </Field>
+                            {state?.error ? (
+                                <div className="flex items-center gap-2 rounded-md border border-destructive/50 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+                                    <CircleAlert className="h-4 w-4 shrink-0" />
+                                    <span>{state.error}</span>
+                                </div>
+                            ) : null}
                             <Field>
                                 <div className="relative flex items-center justify-center">
                                     <Button
-                                        disabled={formState === "PENDING"}
+                                        disabled={isPending}
                                         type="submit"
                                         className="w-full"
                                     >
                                         Create an account
                                     </Button>
-                                    {formState === "PENDING" ? (
+                                    {isPending ? (
                                         <Loader2 className="absolute h-5 w-5 animate-spin" />
                                     ) : null}
                                 </div>
