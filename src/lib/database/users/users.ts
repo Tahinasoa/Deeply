@@ -1,8 +1,8 @@
 import { sql } from "@/lib/database/shared";
-import { zUser, type User } from "@/types/user-session";
 import camelcaseKeys from 'camelcase-keys'
 import bcrypt from 'bcryptjs'
 import { nanoid } from 'nanoid'
+import { type User, zUser, type UnsafeUser, zUnsafeUser } from "@/types/user-session";
 
 export async function getUser(
   key: { userId: number } | { username: string } | {publicId : string}
@@ -30,6 +30,41 @@ export async function getUser(
   }
 
   const parsedUser = zUser.safeParse(camelcaseKeys(user)); //make sure to convert snake_case into camelCase
+
+  if (!parsedUser.success) {
+    throw new Error(
+      "User data retrieved from the database does not match the expected schema"
+    );
+  }
+
+  return parsedUser.data;
+}
+export async function getUnsafeUser(
+  key: { userId: number } | { username: string } | {publicId : string}
+): Promise<UnsafeUser | null> {
+
+  const condition =
+    "userId" in key
+      ? sql`id = ${key.userId}`
+      :
+      "username" in key ?
+        sql`username = ${key.username}`
+        : sql`public_id = ${key.publicId}`;
+
+  const user = (
+    await sql`
+      SELECT id,public_id, username, full_name, role, pwdhash,created_at
+      FROM users
+      WHERE ${condition}
+      LIMIT 1
+    `
+  )[0];
+
+  if (!user) {
+    return null;
+  }
+
+  const parsedUser = zUnsafeUser.safeParse(camelcaseKeys(user)); //make sure to convert snake_case into camelCase
 
   if (!parsedUser.success) {
     throw new Error(

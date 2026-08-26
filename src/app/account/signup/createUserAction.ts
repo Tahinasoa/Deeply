@@ -26,5 +26,5 @@ export async function createUserAction(prevState: unknown, formData: FormData) {
     }
 
     // succès
-    redirect("account/login");
+    redirect("/account/login");
 }
