@@ -49,8 +49,8 @@ export default function SignupForm({
                                             id="student_role"
                                             type="radio"
                                             name="role"
-                                            value="STUDENT"
-                                            defaultChecked={state?.role !== 'TEACHER'}
+                                            value="student"
+                                            defaultChecked={state?.role !== 'teacher'}
                                             required
                                         />
                                         <FieldLabel htmlFor="student_role">Student</FieldLabel>
@@ -61,8 +61,8 @@ export default function SignupForm({
                                             id="teacher_role"
                                             type="radio"
                                             name="role"
-                                            value="TEACHER"
-                                            defaultChecked={state?.role === 'TEACHER'}
+                                            value="teacher"
+                                            defaultChecked={state?.role === 'teacher'}
                                             required
                                         />
                                         <FieldLabel htmlFor="teacher_role">Teacher</FieldLabel>
@@ -70,13 +70,13 @@ export default function SignupForm({
                                 </div>
                             </Field>
                             <Field>
-                                <FieldLabel htmlFor="pseudo">Pseudo *</FieldLabel>
+                                <FieldLabel htmlFor="username">Pseudo *</FieldLabel>
                                 <Input
-                                    id="pseudo"
-                                    name="pseudo"
+                                    id="username"
+                                    name="username"
                                     type="text"
                                     placeholder="Pseudo"
-                                    defaultValue={state?.pseudo}
+                                    defaultValue={state?.username}
                                     required
                                 />
                             </Field>
