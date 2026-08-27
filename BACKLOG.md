@@ -13,7 +13,9 @@
 * [x] MCQ as first activity.
 
 ## [ ] Phase 2 — Authentification system
-* [ ] Authentification system, connected with a database.
+* [x] Basic Authentification system, connected with a database.
+* [ ] Test authentification system.
+* [ ] Type JWT, Session, Authorize callbacks
 
 ## [ ] Phase 3 — Real Data
 * [ ] real Postgresql database.
