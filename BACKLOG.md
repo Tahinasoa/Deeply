@@ -22,19 +22,17 @@
 * [ ] CLI  : generation from raw text, integration to database
 * [ ] Filters: grade, subject, topic, type
 
+## [ ] Phase 5 — Pedagogical Features
+* [ ] integrate pedagogical objectives to the session and activity types
+* [ ] implement the mastery level from percentage of validated objectives
+* [ ] implement feedback system based at the end of each ativity
 
-## [ ] Phase 4 — Additional Activity Type
+## [ ] Phase 5 — Additional Activity Type
 
 * [ ] MCQ with multiple correct answers
 * [ ] fill-in-the-blank (free text)
 * [ ] fill-in-the-blank (word bank)
 * [ ] item reordering
-
-
-## [ ] Phase 5 — Pedagogical Features
-* [ ] integrate pedagogical objectives to the session and activity types
-* [ ] implement the martery level from percentage of validated objecctives
-* [ ] implement feedback system based at the end of each ativity
 
 ## Future / Out of Scope for MVP
 

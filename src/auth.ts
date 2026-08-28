@@ -46,6 +46,8 @@ export const { handlers,auth, signIn, signOut } = NextAuth({
   callbacks : {
     async jwt({token,user}){
       if(user){
+        token.sub = user.publicId ;
+        token.ro
         token = {...token, ...user} ;
       }
       return token ;
