@@ -104,11 +104,11 @@ export async function createUser({
     }
     throw new Error("Failed to create user", {cause : err}) ;
   }
-  return {publicId}
+  return {publicId} ;
 }
 
 
-function isUniqueViolation(err: unknown): boolean {
+export function isUniqueViolation(err: unknown): boolean {
   return (
     typeof err === "object" &&
     err !== null &&

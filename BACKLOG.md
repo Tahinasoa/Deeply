@@ -15,7 +15,9 @@
 ## [ ] Phase 2 — Authentification system
 * [x] Basic Authentification system, connected with a database.
 * [x] Type JWT, Session, Authorize callbacks
-* [ ] Test authentification system.
+* [x] Test authentification system — unit tests (authorize, jwt, session callbacks)
+* [ ] Test `authorized` proxy callback
+* [ ] Integration test: full login flow (optional/later)
 
 ## [ ] Phase 3 — Real Data
 * [ ] real Postgresql database.
