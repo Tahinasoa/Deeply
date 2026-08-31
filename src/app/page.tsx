@@ -11,21 +11,25 @@ import { auth, signOut } from '@/auth'
 import { LogOut, LogOutIcon } from 'lucide-react'
 import { LogoutButton } from '@/components/LogOutButton'
 import { LoginButton } from '@/components/LoginButton'
+import { redirect } from 'next/navigation'
+
 
 
 
 export default async function Home() {
   const repo = new Repository() ;
   const userSession = await auth() ;
-  const publicId = (userSession as any)?.publicId as string;
-  const username = (userSession as any)?.username as string;
+  const user = userSession?.user ;
+  if(!user){
+    redirect("/account/login") ;
+  }
 
   const sessions:LearningSessionSummary[] = await repo.getLearningSessionsSummaries() ;
-  const progress:LearningSessionProgress[] = await repo.getLearningSessionProgress(publicId) ;
+  const progress:LearningSessionProgress[] = await repo.getLearningSessionProgress(user?.publicId) ;
   const sessionComponents = sessions.map(session=>{
     const prog = progress.find((p)=>(p.learningSessionId===session.id))?.masteryLevel || 0;
     return <LearningSessionItem key={session.id} exerciseId={session.id} title={session.title} description={session.description || ""} masteryLevel={prog} />
-  })
+  }) ;
 
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col relative pb-24">
@@ -45,9 +49,9 @@ export default async function Home() {
     userSession?<>
      <div className="flex flex-col items-center justify-center">
       <Avatar className="h-8 w-8">
-        <AvatarFallback className="text-xs">{username? username[0].toUpperCase() : "?"}</AvatarFallback>
+        <AvatarFallback className="text-xs">{user.username? user.username[0].toUpperCase() : "?"}</AvatarFallback>
       </Avatar>
-      <span className="text-sm font-medium text-muted-foreground">{username}</span>
+      <span className="text-sm font-medium text-muted-foreground">{user.username}</span>
     </div>
     <LogoutButton/>
     </>

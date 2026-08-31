@@ -4,9 +4,10 @@ import Credentials from 'next-auth/providers/credentials';
 import { getUnsafeUser } from "@/lib/database/users/users";
 import { z } from "zod"
 import bcrypt from 'bcryptjs';
-import { zUser } from './types/user-session';
+import { zUser, type User } from './types/user-session';
+import type {} from "next-auth/jwt"
 
-export const { handlers,auth, signIn, signOut } = NextAuth({
+export const { handlers, auth, signIn, signOut } = NextAuth({
   ...authConfig,
   providers: [Credentials({
     async authorize(credentials) {
@@ -43,18 +44,28 @@ export const { handlers,auth, signIn, signOut } = NextAuth({
   }
   )
   ],
-  callbacks : {
-    async jwt({token,user}){
-      if(user){
-        token.sub = user.publicId ;
-        token.ro
-        token = {...token, ...user} ;
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.publicId = user.publicId;
+        token.username = user.username;
+        token.fullName = user.fullName;
+        token.role = user.role;
+        token.createdAt = user.createdAt;
       }
-      return token ;
+      return token;
     },
-    async session({session, token}){
-      session = {...session, ...token} ;
-      return session ;
+
+    async session({ session, token }) {
+      const user: User = {
+        publicId: token.publicId,
+        username: token.username,
+        fullName: token.fullName,
+        role: token.role,
+        createdAt: token.createdAt
+      };
+      session.user = { id: user.publicId, email: user.username, emailVerified: null, ...user };
+      return session;
     }
   }
 }

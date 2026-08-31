@@ -14,8 +14,8 @@
 
 ## [ ] Phase 2 — Authentification system
 * [x] Basic Authentification system, connected with a database.
+* [x] Type JWT, Session, Authorize callbacks
 * [ ] Test authentification system.
-* [ ] Type JWT, Session, Authorize callbacks
 
 ## [ ] Phase 3 — Real Data
 * [ ] real Postgresql database.
