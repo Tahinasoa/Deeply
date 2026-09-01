@@ -1,19 +1,24 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { MasteryLevelChart } from "@/components/ui/masteryLevel";
 import {  EvaluationActivityContainer } from "./evaluationActivities/evaluationActivityContainer";
 import Repository from "@/lib/database/mock/db";
-import { useUserId } from "@/lib/authentification/hook";
 import { MarkdownContent } from "@/components/markdownContent";
+import { auth } from "@/auth";
 
 export default async function Page(props: {
   params: Promise<{ id: string }>
 }) {
   const params = await props.params;
   const sessionId  = params.id ;
+  const userSession = await auth() ;
+  if( !userSession || !userSession.user ) {
+    redirect("/login") ;
+  }
+
+  const userId = userSession.user.publicId ;
   const repo = new Repository() ;
-  const userId = useUserId() ;
   const [learningSession,_progress, documents] = await Promise.all([
     repo.getLearningSessionsSummary(sessionId),
     repo.getOneLearningSessionProgress(userId, sessionId),

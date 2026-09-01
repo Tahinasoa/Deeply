@@ -7,66 +7,101 @@ import { ThemeSwitch } from '@/components/themeSwitch'
 import Repository from '@/lib/database/mock/db'
 import { LearningSessionProgress, LearningSessionSummary } from '@/types/learning-session'
 import { LearningSessionItem } from '@/components/learningSession'
-import { auth, signOut } from '@/auth'
-import { LogOut, LogOutIcon } from 'lucide-react'
+import { auth } from '@/auth'
 import { LogoutButton } from '@/components/LogOutButton'
 import { LoginButton } from '@/components/LoginButton'
 import { redirect } from 'next/navigation'
+import Image from "next/image";
 
 
 
 
 export default async function Home() {
-  const repo = new Repository() ;
-  const userSession = await auth() ;
-  const user = userSession?.user ;
-  if(!user){
-    redirect("/account/login") ;
+  const repo = new Repository();
+  const userSession = await auth();
+  const user = userSession?.user;
+  if (!user) {
+    redirect("/account/login");
   }
 
-  const sessions:LearningSessionSummary[] = await repo.getLearningSessionsSummaries() ;
-  const progress:LearningSessionProgress[] = await repo.getLearningSessionProgress(user?.publicId) ;
-  const sessionComponents = sessions.map(session=>{
-    const prog = progress.find((p)=>(p.learningSessionId===session.id))?.masteryLevel || 0;
+  const sessions: LearningSessionSummary[] = await repo.getLearningSessionsSummaries();
+  const progress: LearningSessionProgress[] = await repo.getLearningSessionProgress(user?.publicId);
+  const sessionComponents = sessions.map(session => {
+    const prog = progress.find((p) => (p.learningSessionId === session.id))?.masteryLevel || 0;
     return <LearningSessionItem key={session.id} exerciseId={session.id} title={session.title} description={session.description || ""} masteryLevel={prog} />
-  }) ;
+  });
 
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col relative pb-24">
-      
 
-      <header className="w-full border-b px-6 md:px-12 lg:px-24 py-4 flex flex-col">
+<header className="w-full border-b border-border/60 bg-background">
+  <div className="px-6 md:px-12 lg:px-24 py-5 flex flex-col gap-5">
 
-<div className='flex items-center justify-between'>
-  <div className="text-xl font-bold tracking-tight">Deeply : Understand concepts instead of memorizing them.</div>
-  <div className='flex items-stretch gap-3'>
-    <ThemeSwitch />
-    
-    {/* item separator*/}
-    <div className="w-px bg-border"></div>
-    
-   {
-    userSession?<>
-     <div className="flex flex-col items-center justify-center">
-      <Avatar className="h-8 w-8">
-        <AvatarFallback className="text-xs">{user.username? user.username[0].toUpperCase() : "?"}</AvatarFallback>
-      </Avatar>
-      <span className="text-sm font-medium text-muted-foreground">{user.username}</span>
-    </div>
-    <LogoutButton/>
-    </>
-    :
-    <LoginButton/>
-    }
+    <div className="flex items-center justify-between gap-6">
 
-  </div>
-</div>
+      {/* Logo + wordmark */}
+      <div className="flex items-center gap-4 shrink-0">
+        <div className="relative">
+          <Image
+            src="/logo.png"
+            alt="Logo"
+            width={56}
+            height={56}
+            className="rounded-xl"
+          />
+          <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 h-0.75 w-8 rounded-full bg-[#F4A261]" />
+        </div>
+        <div className="hidden sm:flex flex-col leading-tight">
+          <span className="text-xl font-bold tracking-tight text-foreground">
+            Deeply
+          </span>
+          <span className="text-xs text-muted-foreground">
+            Understand concepts instead of memorizing them
+          </span>
+        </div>
+      </div>
 
-
-        <div className='w-full max-w-md'>
+      {/* Search — centered, breathing room */}
+      <div className="hidden md:flex flex-1 justify-center max-w-md mx-auto">
+        <div className="w-full">
           <SearchInput />
         </div>
-      </header>
+      </div>
+
+      {/* Actions cluster */}
+      <div className="flex items-center gap-3 shrink-0">
+        <ThemeSwitch />
+
+        <div className="h-6 w-px bg-border" />
+
+        {userSession ? (
+          <>
+            <div className="flex items-center gap-2.5 pl-1">
+              <Avatar className="h-8 w-8 ring-2 ring-[#8FD3E8]/40">
+                <AvatarFallback className="text-xs bg-[#1B2A4A] text-white">
+                  {user.username ? user.username[0].toUpperCase() : "?"}
+                </AvatarFallback>
+              </Avatar>
+              <span className="hidden lg:block text-sm font-medium text-muted-foreground max-w-25 truncate">
+                {user.username}
+              </span>
+            </div>
+            <LogoutButton />
+          </>
+        ) : (
+          <LoginButton />
+        )}
+      </div>
+
+    </div>
+
+    {/* Search — mobile only, full width below */}
+    <div className="md:hidden w-full">
+      <SearchInput />
+    </div>
+
+  </div>
+</header>
 
 
       <main className='px-6 md:px-12 lg:px-24 py-6 flex-1'>
