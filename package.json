@@ -5,6 +5,6 @@
         "packages/*"
     ],
     "scripts": {
-        "dev:web" : "npm run dev --workspace=@deeply/web"
+        "dev:web": "npm run dev --workspace=@deeply/web"
     }
 }

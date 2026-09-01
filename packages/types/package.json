@@ -1,0 +1,24 @@
+{
+  "name": "@deeply/types",
+  "version": "0.0.1",
+  "description": "a collection of shared type accross the app",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "zod": "^4.5.4"
+  }
+}
