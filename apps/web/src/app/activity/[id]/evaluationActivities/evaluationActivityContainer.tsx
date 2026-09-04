@@ -4,7 +4,7 @@ import OpenEvaluationButton from "./openEvaluationButton";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { MCQ } from "./mcq/mcq";
-import { Activity } from "@/types/learning-session";
+import { Activity } from "@/types/learning-item";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import ActivityFeedback from "./activityFeedback";

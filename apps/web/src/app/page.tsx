@@ -5,8 +5,8 @@ import SearchInput from '@/components/ui/searchInput'
 import { ThemeSwitch } from '@/components/themeSwitch'
 
 import Repository from '@/lib/database/mock/db'
-import { LearningSessionProgress, LearningSessionSummary } from '@/types/learning-session'
-import { LearningSessionItem } from '@/components/learningSession'
+import { LearningItemProgress, LearningItemSummary } from '@/types/learning-item'
+import { LearningItemComponent } from '@/components/learningItem'
 import { auth } from '@/auth'
 import { LogoutButton } from '@/components/LogOutButton'
 import { LoginButton } from '@/components/LoginButton'
@@ -24,11 +24,11 @@ export default async function Home() {
     redirect("/account/login");
   }
 
-  const sessions: LearningSessionSummary[] = await repo.getLearningSessionsSummaries();
-  const progress: LearningSessionProgress[] = await repo.getLearningSessionProgress(user?.publicId);
+  const sessions: LearningItemSummary[] = await repo.getLearningItemsSummaries();
+  const progress: LearningItemProgress[] = await repo.getLearningItemProgress(user?.publicId);
   const sessionComponents = sessions.map(session => {
-    const prog = progress.find((p) => (p.learningSessionId === session.id))?.masteryLevel || 0;
-    return <LearningSessionItem key={session.id} exerciseId={session.id} title={session.title} description={session.description || ""} masteryLevel={prog} />
+    const prog = progress.find((p) => (p.learningItemId === session.id))?.masteryLevel || 0;
+    return <LearningItemComponent key={session.id} exerciseId={session.id} title={session.title} description={session.description || ""} masteryLevel={prog} />
   });
 
   return (

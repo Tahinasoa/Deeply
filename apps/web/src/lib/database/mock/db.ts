@@ -1,47 +1,47 @@
-import { Activity, LearningSessionDocument, LearningSessionProgress, LearningSessionSummary } from "@/types/learning-session";
-import { mockSessionSummary } from "./mockSession";
-import { mockSessionProgress } from "./mockProgress";
-import { mockLearningSessionDocuments } from "./mockSessionDocument";
+import { Activity, LearningItemDocument, LearningItemProgress, LearningItemSummary } from "@/types/learning-item";
+import { mockItemSummary } from "./mockItems";
+import { mockItemProgress } from "./mockProgress";
+import { mockLearningItemDocuments } from "./mockItemDocument";
 import { mockActivitiesMCQ } from "./mockmcq";
 
 class Repository {
-    async getLearningSessionsSummaries(): Promise<LearningSessionSummary[]> {
+    async getLearningItemsSummaries(): Promise<LearningItemSummary[]> {
         return new Promise((resolve) => {
-            setTimeout(() => resolve(mockSessionSummary), 200);
+            setTimeout(() => resolve(mockItemSummary), 200);
         });
     }
-    async getLearningSessionsSummary(sessionId: string): Promise<LearningSessionSummary|undefined> {
-        const summary = mockSessionSummary.find(s=>(s.id===sessionId));
+    async getLearningItemsSummary(itemId: string): Promise<LearningItemSummary|undefined> {
+        const summary = mockItemSummary.find(s=>(s.id===itemId)) ;
 
         return new Promise((resolve) => {
             setTimeout(() => resolve(summary), 200);
         });
     }
-    async getLearningSessionDocuments(sessionId: string): Promise<LearningSessionDocument | undefined> {
-        const doc = mockLearningSessionDocuments.find(s => (s.id === sessionId));
+    async getLearningItemsDocuments(itemId: string): Promise<LearningItemDocument | undefined> {
+        const doc = mockLearningItemDocuments.find(s => (s.id === itemId));
 
         return new Promise((resolve) => {
             setTimeout(() => resolve(doc), 200);
         });
     }
 
-    async getLearningSessionProgress(userId: string, sessionId?: string): Promise<LearningSessionProgress[]> {
+    async getLearningItemProgress(userId: string, itemId?: string): Promise<LearningItemProgress[]> {
         return new Promise((resolve) => {
             setTimeout(() => {
-                const filtered = mockSessionProgress.filter(
-                    (p) => p.userId === userId && (sessionId ? p.learningSessionId === sessionId : true)
+                const filtered = mockItemProgress.filter(
+                    (p) => p.userId === userId && (itemId ? p.learningItemId === itemId : true)
                 );
                 resolve(filtered);
             }, 200);
         });
     }
 
-    async getOneLearningSessionProgress(userId: string, sessionId: string): Promise<LearningSessionProgress | undefined> {
-        const results = await this.getLearningSessionProgress(userId, sessionId);
+    async getOneLearningItemProgress(userId: string, itemId: string): Promise<LearningItemProgress | undefined> {
+        const results = await this.getLearningItemProgress(userId, itemId);
         return results[0];
     }
-    async getActivities(sessionId:string) :Promise<Activity[]>{
-        const results = mockActivitiesMCQ.filter(a=>a.learningSessionId===sessionId) ;
+    async getActivities(itemId:string) :Promise<Activity[]>{
+        const results = mockActivitiesMCQ.filter(a=>a.learningItemId===itemId) ;
         return new Promise((resolve)=>{
             setTimeout(()=>{resolve(results)}, 300) ;
         })

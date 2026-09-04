@@ -4,18 +4,18 @@
 * [x] dummy app
 
 ## [x] Phase 1 — Dashboard (Mock Data)
-* [x] defined zod types for shared object (database, dashboard, session page, activity page).
+* [x] defined zod types for shared object (database, dashboard, items page, activity page).
 * [x] mock database.
 
-* [x] `/` — Dashboard : list of available session (featuring search, no filter)
-* [x] session page 
+* [x] `/` — Dashboard : list of available items (featuring search, no filter)
+* [x] items page 
 
 * [x] MCQ as first activity.
 
 ## [ ] Phase 2 — Authentification system
 * [x] Basic Authentification system, connected with a database.
-* [x] Type JWT, Session, Authorize callbacks
-* [x] Test authentification system — unit tests (authorize, jwt, session callbacks)
+* [x] Type JWT, items, Authorize callbacks
+* [x] Test authentification system — unit tests (authorize, jwt, items callbacks)
 * [ ] Test `authorized` proxy callback
 * [ ] Integration test: full login flow (optional/later)
 
@@ -25,7 +25,7 @@
 * [ ] Filters: grade, subject, topic, type
 
 ## [ ] Phase 5 — Pedagogical Features
-* [ ] integrate pedagogical objectives to the session and activity types
+* [ ] integrate pedagogical objectives to the items and activity types
 * [ ] implement the mastery level from percentage of validated objectives
 * [ ] implement feedback system based at the end of each ativity
 

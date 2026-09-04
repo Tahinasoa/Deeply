@@ -1,13 +1,13 @@
-import { LearningSessionProgress } from '@/types/learning-session';
+import { LearningItemProgress } from '@/types/learning-item';
 import { z } from 'zod';
 
 
 
 
-export const mockSessionProgress: LearningSessionProgress[] = Array.from(
+export const mockItemProgress: LearningItemProgress[] = Array.from(
   { length: 9 },
   (_, index) => ({
-    learningSessionId: String(index + 1),
+    learningItemId: String(index + 1),
     userId: `user`,
     status:
       index % 3 === 0

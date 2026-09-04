@@ -11,7 +11,7 @@ export default async function Page(props: {
   params: Promise<{ id: string }>
 }) {
   const params = await props.params;
-  const sessionId  = params.id ;
+  const itemId  = params.id ;
   const userSession = await auth() ;
   if( !userSession || !userSession.user ) {
     redirect("/login") ;
@@ -19,19 +19,19 @@ export default async function Page(props: {
 
   const userId = userSession.user.publicId ;
   const repo = new Repository() ;
-  const [learningSession,_progress, documents] = await Promise.all([
-    repo.getLearningSessionsSummary(sessionId),
-    repo.getOneLearningSessionProgress(userId, sessionId),
-    repo.getLearningSessionDocuments(sessionId)
+  const [learningItem,_progress, documents] = await Promise.all([
+    repo.getLearningItemsSummary(itemId),
+    repo.getOneLearningItemProgress(userId, itemId),
+    repo.getLearningItemsDocuments(itemId)
   ]
   ) ;
   const progress = _progress || "0" ;
 
-  if (!learningSession || !documents) {
+  if (!learningItem || !documents) {
     notFound();
   }
 
-  const activities = await repo.getActivities(learningSession.id) ;
+  const activities = await repo.getActivities(learningItem.id) ;
 
 
   return (
@@ -50,14 +50,14 @@ export default async function Page(props: {
             <MasteryLevelChart masteryLevel={65.5} innerRadius={30} outerRadius={40} />
             <div className="flex flex-col items-start gap-0">
               <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              {learningSession.type}
+              {learningItem.type}
             </span>
               <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground mt-1.5">
-                {learningSession.title}
+                {learningItem.title}
               </h1>
               <div className="text-muted-foreground">
-                <div className="bg-muted text-muted-foreground px-2.5 py-0.5 rounded-full text-xs font-medium" >{learningSession.topic} | {learningSession.grades.join(' , ')} </div>
-                {learningSession.description ? <div>{learningSession.description}</div> : null}
+                <div className="bg-muted text-muted-foreground px-2.5 py-0.5 rounded-full text-xs font-medium" >{learningItem.topic} | {learningItem.grades.join(' , ')} </div>
+                {learningItem.description ? <div>{learningItem.description}</div> : null}
               </div>
             </div>
           </header>
