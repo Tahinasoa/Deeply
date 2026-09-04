@@ -4,7 +4,7 @@ import { JWT } from "next-auth/jwt";
 
 export async function jwtCallback({ token, user }: { token: JWT, user: User }) {
     if (user) {
-        token.publicId = user.publicId;
+        token.id = user.id! ;//I think this is completly safe, I made id mandatory but the original id was optional.
         token.username = user.username;
         token.fullName = user.fullName;
         token.role = user.role;
@@ -15,7 +15,7 @@ export async function jwtCallback({ token, user }: { token: JWT, user: User }) {
 
 export async function sessionCallback({ session, token }: { session: Session, token: JWT }) {
     session.user = {
-        publicId: token.publicId,
+        id: token.id,
         username: token.username,
         fullName: token.fullName,
         role: token.role,

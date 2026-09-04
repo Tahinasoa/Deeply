@@ -23,7 +23,7 @@ CREATE TYPE assessment_status AS ENUM (
 -- ========================================
 
 CREATE TABLE learning_items (
-  id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  id            TEXT PRIMARY KEY,
   title         TEXT NOT NULL,
   subject       TEXT NOT NULL,
   topic         TEXT NOT NULL,
@@ -40,10 +40,11 @@ CREATE TABLE learning_items (
 
 CREATE TABLE learning_item_documents (
   id            TEXT PRIMARY KEY,
-  learning_item_id UUID NOT NULL REFERENCES learning_items(id) ON DELETE CASCADE,
+  learning_item_id TEXT NOT NULL REFERENCES learning_items(id) ON DELETE CASCADE,
   content       TEXT NOT NULL, -- markdown
   created_at    TIMESTAMPTZ NOT NULL DEFAULT now(),
-  updated_at    TIMESTAMPTZ NOT NULL DEFAULT now()
+  updated_at    TIMESTAMPTZ NOT NULL DEFAULT now(),
+  UNIQUE (learning_item_id)
 );
 
 -- ========================================
@@ -51,7 +52,7 @@ CREATE TABLE learning_item_documents (
 -- ========================================
 
 CREATE TABLE learning_item_grades (
-  learning_item_id  UUID NOT NULL REFERENCES learning_items(id) ON DELETE CASCADE,
+  learning_item_id  TEXT NOT NULL REFERENCES learning_items(id) ON DELETE CASCADE,
   grade             grade NOT NULL,
   PRIMARY KEY (learning_item_id, grade)
 );
@@ -61,8 +62,8 @@ CREATE TABLE learning_item_grades (
 -- ========================================
 
 CREATE TABLE activities (
-  id                UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  learning_item_id  UUID NOT NULL REFERENCES learning_items(id) ON DELETE CASCADE,
+  id                TEXT PRIMARY KEY,
+  learning_item_id  TEXT NOT NULL REFERENCES learning_items(id) ON DELETE CASCADE,
   type              activity_type NOT NULL,
   anchor_question   TEXT NOT NULL,
   instruction       TEXT NOT NULL,
@@ -74,13 +75,13 @@ CREATE TABLE activities (
 
 -- --- MCQ (single correct answer) ---
 CREATE TABLE mcq_activities (
-  activity_id  UUID PRIMARY KEY REFERENCES activities(id) ON DELETE CASCADE
+  activity_id  TEXT PRIMARY KEY REFERENCES activities(id) ON DELETE CASCADE
   -- no extra fields for now beyond options below
 );
 
 CREATE TABLE mcq_options (
-  id           UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  activity_id  UUID NOT NULL REFERENCES mcq_activities(activity_id) ON DELETE CASCADE,
+  id           TEXT PRIMARY KEY ,
+  activity_id  TEXT NOT NULL REFERENCES mcq_activities(activity_id) ON DELETE CASCADE,
   text         TEXT NOT NULL,
   is_correct   BOOLEAN NOT NULL DEFAULT false
 );
@@ -90,8 +91,8 @@ CREATE TABLE mcq_options (
 -- ========================================
 
 CREATE TABLE learning_item_progress (
-  learning_item_id  UUID NOT NULL REFERENCES learning_items(id) ON DELETE CASCADE,
-  user_id           UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  learning_item_id  TEXT NOT NULL REFERENCES learning_items(id) ON DELETE CASCADE,
+  user_id           TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   status            assessment_status NOT NULL DEFAULT 'not_assessed',
   mastery_level     SMALLINT NOT NULL DEFAULT 0 CHECK (mastery_level BETWEEN 0 AND 100),
   updated_at        TIMESTAMPTZ NOT NULL DEFAULT now(),

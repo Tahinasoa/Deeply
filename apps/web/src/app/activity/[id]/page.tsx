@@ -17,7 +17,7 @@ export default async function Page(props: {
     redirect("/login") ;
   }
 
-  const userId = userSession.user.publicId ;
+  const userId = userSession.user.id ;
   const repo = new Repository() ;
   const [learningItem,_progress, documents] = await Promise.all([
     repo.getLearningItemsSummary(itemId),

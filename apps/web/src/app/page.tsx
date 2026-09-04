@@ -25,7 +25,7 @@ export default async function Home() {
   }
 
   const sessions: LearningItemSummary[] = await repo.getLearningItemsSummaries();
-  const progress: LearningItemProgress[] = await repo.getLearningItemProgress(user?.publicId);
+  const progress: LearningItemProgress[] = await repo.getLearningItemProgress(user?.id);
   const sessionComponents = sessions.map(session => {
     const prog = progress.find((p) => (p.learningItemId === session.id))?.masteryLevel || 0;
     return <LearningItemComponent key={session.id} exerciseId={session.id} title={session.title} description={session.description || ""} masteryLevel={prog} />

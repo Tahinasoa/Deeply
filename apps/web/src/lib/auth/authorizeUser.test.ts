@@ -34,14 +34,14 @@ describe("authorizeUser", () => {
     }) ;
 
     it("return null if password doesn't match", async () => {
-        vi.mocked(getUnsafeUser).mockResolvedValue({ pwdhash: "hash" } as any)
+        vi.mocked(getUnsafeUser).mockResolvedValue({ passwordHash: "hash" } as any)
         vi.mocked(bcrypt.compare).mockResolvedValue(false as never);
         const result = await authorizeUser({ username: "bob", password: "wrong" })
         expect(result).toBeNull()
     }) ;
 
     it("return a user is everythings get correct", async () => {
-        const fakeUser = { publicId: "abc", username: "bob", fullName: "Bob", role: "student", createdAt: new Date(), pwdhash: "hash" }
+        const fakeUser = { id: "abc", username: "bob", fullName: "Bob", role: "student", createdAt: new Date(), passwordHash: "hash" }
         vi.mocked(getUnsafeUser).mockResolvedValue(fakeUser as any)
         vi.mocked(bcrypt.compare).mockResolvedValue(true as never)
 

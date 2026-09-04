@@ -19,13 +19,12 @@ export async function authorizeUser(credentials:unknown) {
       if (!unsafeUser) {
         return null;
       }
-      const pwdMatch = await bcrypt.compare(password, unsafeUser.pwdhash);
+      const pwdMatch = await bcrypt.compare(password, unsafeUser.passwordHash);
       if (!pwdMatch) {
         return null;
       }
       else {
-        const user = zUser.parse(unsafeUser);
-        return { id: user.publicId, ...user };
+        return zUser.parse(unsafeUser);
       }
     }
     catch (err) {

@@ -10,7 +10,7 @@ declare module "next-auth" {
 
 declare module "next-auth/jwt" {
     interface JWT {
-        publicId: string
+        id: string
         username: string
         fullName: string
         role: 'teacher' | 'student' | 'admin'

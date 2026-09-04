@@ -5,7 +5,7 @@ import { nanoid } from 'nanoid'
 import { type User, zUser, type UnsafeUser, zUnsafeUser } from "@/types/user-session";
 
 export async function getUser(
-  key: { userId: number } | { username: string } | {publicId : string}
+  key: { userId: number } | { username: string } | {id : string}
 ): Promise<User | null> {
 
   const condition =
@@ -14,7 +14,7 @@ export async function getUser(
       :
       "username" in key ?
         sql`username = ${key.username}`
-        : sql`public_id = ${key.publicId}`;
+        : sql`public_id = ${key.id}`;
 
   const user = (
     await sql`
@@ -40,7 +40,7 @@ export async function getUser(
   return parsedUser.data;
 }
 export async function getUnsafeUser(
-  key: { userId: number } | { username: string } | {publicId : string}
+  key: { userId: number } | { username: string } | {id : string}
 ): Promise<UnsafeUser | null> {
 
   const condition =
@@ -49,11 +49,11 @@ export async function getUnsafeUser(
       :
       "username" in key ?
         sql`username = ${key.username}`
-        : sql`public_id = ${key.publicId}`;
+        : sql`public_id = ${key.id}`;
 
   const user = (
     await sql`
-      SELECT id,public_id, username, full_name, role, pwdhash,created_at
+      SELECT id,public_id, username, full_name, role, password_hash,created_at
       FROM users
       WHERE ${condition}
       LIMIT 1
@@ -85,18 +85,18 @@ export async function createUser({
   role: "student" | "teacher";
   fullName: string;
   password: string;
-}): Promise<{publicId:string}> {
+}): Promise<{id:string}> {
   const existingUser = await getUser({ username });
   if (existingUser) {
     throw new Error("The provided username is not available");
   }
 
-  const pwdHash = await bcrypt.hash(password, 10);
-  const publicId = nanoid();
+  const passwordHash = await bcrypt.hash(password, 10);
+  const id = nanoid();
   try {
     await sql`INSERT INTO users
-    (public_id, username, full_name, role, pwdhash)
-    VALUES (${publicId}, ${username}, ${fullName},${role},${pwdHash})`;
+    (public_id, username, full_name, role, password_hash)
+    VALUES (${id}, ${username}, ${fullName},${role},${passwordHash})`;
   }
   catch (err) {
     if(isUniqueViolation(err)){
@@ -104,7 +104,7 @@ export async function createUser({
     }
     throw new Error("Failed to create user", {cause : err}) ;
   }
-  return {publicId} ;
+  return {id} ;
 }
 
 
