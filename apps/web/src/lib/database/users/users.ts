@@ -15,7 +15,7 @@ export async function getUser(
 
   const user = (
     await sql`
-      SELECT public_id, username, full_name, role, created_at
+      SELECT id, username, full_name, role, created_at
       FROM users
       WHERE ${condition}
       LIMIT 1
@@ -37,7 +37,7 @@ export async function getUser(
   return parsedUser.data;
 }
 export async function getPasswordHash(id: string) {
-  const pwd = await sql`SELECT password_hash FROM users WHERE public_id = ${id} LIMIT 1`;
+  const pwd = await sql`SELECT password_hash FROM users WHERE id = ${id} LIMIT 1`;
   if (pwd.length === 0) {
     throw new Error("User not found");
   }
@@ -64,7 +64,7 @@ export async function createUser({
   const id = nanoid();
   try {
     await sql`INSERT INTO users
-    (public_id, username, full_name, role, password_hash)
+    (id, username, full_name, role, password_hash)
     VALUES (${id}, ${username}, ${fullName},${role},${passwordHash})`;
   }
   catch (err) {

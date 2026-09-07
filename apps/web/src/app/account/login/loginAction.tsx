@@ -20,7 +20,7 @@ export async function loginAction(prevState: unknown, form: FormData) {
                 case "CredentialsSignin":
                     return { ...data, error: "Provided Username and password doesn't match to an existing account" } ;
                 default:
-                    return { ...data, error: "An error occured during connection" } ;
+                    return { ...data, error: "An Authentification error occured" } ;
             }
         }
         else{

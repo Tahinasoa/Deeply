@@ -1,7 +1,7 @@
 // src/lib/auth/authorize-user.test.ts
 import { describe, it, test, expect, vi, beforeEach } from "vitest"
 import { authorizeUser } from "./authorizeUser"
-import { getUnsafeUser } from "@/lib/database/users/users"
+import { getUser } from "@/lib/database/users/users"
 import bcrypt from "bcryptjs"
 
 
@@ -22,19 +22,19 @@ describe("authorizeUser", () => {
     ] as const)("case: %s", async (msg, cred) => {
         const result = await authorizeUser(cred)
         expect(result).toBeNull() ;
-        expect(getUnsafeUser).not.toHaveBeenCalled() ;
+        expect(getUser).not.toHaveBeenCalled() ;
     }) ;
 
     it("return null if user doesn't exists", async () => {
-        vi.mocked(getUnsafeUser).mockResolvedValue(null);
+        vi.mocked(getUser).mockResolvedValue(null);
         const result = await authorizeUser({ username: "bob", password: "pwd" })
         expect(result).toBeNull() ;
-        expect(getUnsafeUser).toHaveBeenCalledTimes(1) ;
+        expect(getUser).toHaveBeenCalledTimes(1) ;
         expect(bcrypt.compare).not.toHaveBeenCalled() ;
     }) ;
 
     it("return null if password doesn't match", async () => {
-        vi.mocked(getUnsafeUser).mockResolvedValue({ passwordHash: "hash" } as any)
+        vi.mocked(getUser).mockResolvedValue({ passwordHash: "hash" } as any)
         vi.mocked(bcrypt.compare).mockResolvedValue(false as never);
         const result = await authorizeUser({ username: "bob", password: "wrong" })
         expect(result).toBeNull()
@@ -42,7 +42,7 @@ describe("authorizeUser", () => {
 
     it("return a user is everythings get correct", async () => {
         const fakeUser = { id: "abc", username: "bob", fullName: "Bob", role: "student", createdAt: new Date(), passwordHash: "hash" }
-        vi.mocked(getUnsafeUser).mockResolvedValue(fakeUser as any)
+        vi.mocked(getUser).mockResolvedValue(fakeUser as any)
         vi.mocked(bcrypt.compare).mockResolvedValue(true as never)
 
         const result = await authorizeUser({ username: "bob", password: "correct" })

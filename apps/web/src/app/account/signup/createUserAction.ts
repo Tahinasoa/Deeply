@@ -1,7 +1,7 @@
 "use server";
 
 import { createUser } from "@/lib/database/users/users";
-import { redirect } from "next/navigation";
+import { loginAction } from "../login/loginAction";
 
 export async function createUserAction(prevState: unknown, formData: FormData) {
     if (!formData) return null;
@@ -25,6 +25,6 @@ export async function createUserAction(prevState: unknown, formData: FormData) {
         }
     }
 
-    // succès
-    redirect("/account/login");
+    // successfully created user, now log them in
+    await loginAction(prevState, formData) ;
 }

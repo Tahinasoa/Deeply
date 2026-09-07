@@ -10,15 +10,16 @@ export async function authorizeUser(credentials:unknown) {
       password: z.string()
     }
   );
-
+  
   const parsedCredentials = zCredentials.safeParse(credentials);
   if (parsedCredentials.success) {
     const { username, password } = parsedCredentials.data;
     try {
-      const user = await getUser({ username });
+        const user = await getUser({ username });
       if (!user) {
         return null;
       }
+
       const pwdHash = await getPasswordHash(user.id);
       const pwdMatch = await bcrypt.compare(password, pwdHash) ;
       if (!pwdMatch) {
