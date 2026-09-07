@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { getUnsafeUser } from '../database/users/users';
+import { getPasswordHash, getUser } from '../database/users/users';
 import bcrypt from 'bcryptjs';
 import { zUser } from '@/types/user-session';
 
@@ -15,16 +15,17 @@ export async function authorizeUser(credentials:unknown) {
   if (parsedCredentials.success) {
     const { username, password } = parsedCredentials.data;
     try {
-      const unsafeUser = await getUnsafeUser({ username });
-      if (!unsafeUser) {
+      const user = await getUser({ username });
+      if (!user) {
         return null;
       }
-      const pwdMatch = await bcrypt.compare(password, unsafeUser.passwordHash);
+      const pwdHash = await getPasswordHash(user.id);
+      const pwdMatch = await bcrypt.compare(password, pwdHash) ;
       if (!pwdMatch) {
         return null;
       }
       else {
-        return zUser.parse(unsafeUser);
+        return zUser.parse(user);
       }
     }
     catch (err) {

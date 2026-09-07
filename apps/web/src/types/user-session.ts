@@ -9,9 +9,3 @@ export const zUser = z.object({
 });
 
 export type User = z.infer<typeof zUser>;
-
-export const zUnsafeUser = zUser.extend({
-    id: z.string(),
-    passwordHash: z.string()
-});
-export type UnsafeUser = z.infer<typeof zUnsafeUser>;

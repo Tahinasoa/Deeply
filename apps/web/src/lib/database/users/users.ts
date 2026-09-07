@@ -2,19 +2,16 @@ import { sql } from "@/lib/database/shared";
 import camelcaseKeys from 'camelcase-keys'
 import bcrypt from 'bcryptjs'
 import { nanoid } from 'nanoid'
-import { type User, zUser, type UnsafeUser, zUnsafeUser } from "@/types/user-session";
+import { type User, zUser } from "@/types/user-session";
 
 export async function getUser(
-  key: { userId: number } | { username: string } | {id : string}
+  key: { username: string } | {id : string}
 ): Promise<User | null> {
 
   const condition =
-    "userId" in key
-      ? sql`id = ${key.userId}`
-      :
       "username" in key ?
         sql`username = ${key.username}`
-        : sql`public_id = ${key.id}`;
+        : sql`id = ${key.id}`;
 
   const user = (
     await sql`
@@ -39,41 +36,13 @@ export async function getUser(
 
   return parsedUser.data;
 }
-export async function getUnsafeUser(
-  key: { userId: number } | { username: string } | {id : string}
-): Promise<UnsafeUser | null> {
-
-  const condition =
-    "userId" in key
-      ? sql`id = ${key.userId}`
-      :
-      "username" in key ?
-        sql`username = ${key.username}`
-        : sql`public_id = ${key.id}`;
-
-  const user = (
-    await sql`
-      SELECT id,public_id, username, full_name, role, password_hash,created_at
-      FROM users
-      WHERE ${condition}
-      LIMIT 1
-    `
-  )[0];
-
-  if (!user) {
-    return null;
+export async function getPasswordHash(id: string) {
+  const pwd = await sql`SELECT password_hash FROM users WHERE public_id = ${id} LIMIT 1`;
+  if (pwd.length === 0) {
+    throw new Error("User not found");
   }
-
-  const parsedUser = zUnsafeUser.safeParse(camelcaseKeys(user)); //make sure to convert snake_case into camelCase
-
-  if (!parsedUser.success) {
-    throw new Error(
-      "User data retrieved from the database does not match the expected schema"
-    );
-  }
-
-  return parsedUser.data;
-}
+  return pwd[0].password_hash;
+} ;
 
 export async function createUser({
   username,
