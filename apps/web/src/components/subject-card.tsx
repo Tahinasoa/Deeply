@@ -1,10 +1,12 @@
 import Image from "next/image";
 import { ChevronRight } from "lucide-react";
 import { Card, CardContent } from "./ui/card";
+import Link from "next/link";
 
 interface SubjectInfo {
   name: string;
   logo: string;
+  link : string;
 }
 
 interface SubjectProps {
@@ -13,6 +15,7 @@ interface SubjectProps {
 
 function Subject({ info }: SubjectProps) {
   return (
+    <Link href={`/subject/${info.link}`} className="w-full">
     <Card className="overflow-hidden py-0 gap-0 cursor-pointer transition-shadow hover:shadow-md">
       {/* Illustration */}
       <div className="relative w-full aspect-video">
@@ -32,6 +35,7 @@ function Subject({ info }: SubjectProps) {
         </div>
       </CardContent>
     </Card>
+    </Link>
   );
 }
 

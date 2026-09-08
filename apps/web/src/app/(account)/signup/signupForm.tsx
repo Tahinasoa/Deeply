@@ -132,7 +132,7 @@ export default function SignupForm({
                                     ) : null}
                                 </div>
                                 <FieldDescription className="text-center">
-                                    You already have an account <Link href="/account/login">Log in</Link>
+                                    You already have an account <Link href="/login">Log in</Link>
                                 </FieldDescription>
                             </Field>
                         </FieldGroup>

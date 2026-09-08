@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 
 export function LoginButton() {
   return (
-    <Link href="/account/login">
+    <Link href="/login">
       <Button>
         <LogInIcon className="h-4 w-4" />
         Log in
