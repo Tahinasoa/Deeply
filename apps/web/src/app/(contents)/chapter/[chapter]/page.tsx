@@ -152,7 +152,7 @@ function ContentCard({ item }: { item: ContentItem }) {
         {item.score !== undefined ? (
           <ScoreRing score={item.score} progression={item.progression} />
         ) : (
-          <div className="flex items-center justify-center size-[72px] rounded-xl bg-secondary text-primary">
+          <div className="flex items-center justify-center size-18 rounded-xl bg-secondary text-primary">
             <Box className="size-8" />
           </div>
         )}
