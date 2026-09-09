@@ -1,19 +1,10 @@
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
-
-
-import SearchInput from '@/components/ui/searchInput'
-import { ThemeSwitch } from '@/components/themeSwitch'
-
 import Repository from '@/lib/database/mock/db'
 import { LearningItemProgress, LearningItemSummary } from '@/types/learning-item'
 import { LearningItemComponent } from '@/components/learningItem'
 import { auth } from '@/auth'
-import { LogoutButton } from '@/components/LogOutButton'
-import { LoginButton } from '@/components/LoginButton'
 import { redirect } from 'next/navigation'
-import Image from "next/image";
-import HomeHeader from '@/components/home-header'
-import BigHeroSection from '@/components/big-hero-section'
+import HomeHeader from '@/app/(home)/components/home-header'
+import BigHeroSection from '@/app/(home)/components/big-hero-section'
 import Subject from '@/components/subject-card'
 
 
