@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { Search } from "lucide-react";
 
-function BigHeroSection() {
+function BigHeroSection({ username }: { username?: string }) {
   return (
     <div className="relative bg-background overflow-hidden">
       {/* Background image (landscape) */}
@@ -19,7 +19,7 @@ function BigHeroSection() {
       {/* Content */}
       <div className="relative px-8 py-16 md:py-20">
         <div className="max-w-xl">
-          <p className="text-primary font-semibold mb-2">Bonjour Tahinasoa !</p>
+          <p className="text-primary font-semibold mb-2">Bonjour ${username} !</p>
           <h1 className="text-4xl md:text-5xl font-extrabold text-foreground leading-tight mb-4">
             Apprends aujourd&apos;hui, construis demain.
           </h1>
