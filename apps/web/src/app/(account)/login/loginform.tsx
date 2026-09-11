@@ -93,7 +93,7 @@ export default function LoginForm({
                                     ) : null}
                                 </div>
                                 <FieldDescription className="text-center">
-                                    Don't have an account yet? <Link href="/account/signup">Sign Up</Link>
+                                    Don't have an account yet? <Link href="/signup">Sign Up</Link>
                                 </FieldDescription>
                             </Field>
                         </FieldGroup>

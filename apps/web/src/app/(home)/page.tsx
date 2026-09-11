@@ -24,7 +24,7 @@ export default async function Home() {
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col relative pb-24">
       {/* Header */}
-      <HomeHeader  />
+      <HomeHeader  user={user}/>
       <BigHeroSection username={user.username} />
 
       <main className='px-6 md:px-12 lg:px-24 py-6 flex-1'>

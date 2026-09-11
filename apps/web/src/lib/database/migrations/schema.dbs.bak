@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="PostgreSQL" database="PostgreSQL" id="de95d726-1cee-4e96-8334-b2846a077acf" >
+	<migration_folder><![CDATA[C:\Users\tahinasoa\Documents\Deeply\apps\web\src\lib\database\migrations]]></migration_folder>
+	<schema name="public" >
+		<udt name="learning_item_type" udt_value_type="VARCHAR" udt_precision="NONE" sync_priority="900" >
+			<udt_script><![CDATA[CREATE TYPE ${name} AS ENUM (
+	'course',
+	'practice',
+	'solved_exercise')]]></udt_script>
+		</udt>
+		<udt name="user_role" udt_value_type="VARCHAR" udt_precision="NONE" sync_priority="900" >
+			<udt_script><![CDATA[CREATE TYPE ${name} AS ENUM (
+	'student',
+	'teacher',
+	'admin')]]></udt_script>
+		</udt>
+		<table name="chapters" generator_rows="100" spec="" >
+			<column name="id" type="text" mandatory="y" />
+			<column name="title" type="text" mandatory="y" />
+			<column name="description" type="text" mandatory="y" />
+			<index name="pk_chapters" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="chapters_items" generator_rows="100" spec="" >
+			<column name="chapter_id" type="text" mandatory="y" />
+			<column name="learning_item_id" type="text" mandatory="y" />
+			<index name="pk_chapters_items" unique="PRIMARY_KEY" >
+				<column name="chapter_id" />
+				<column name="learning_item_id" />
+			</index>
+			<fk name="fk_chapters_items_chapters" to_schema="public" to_table="chapters" delete_action="cascade" update_action="cascade" >
+				<fk_column name="chapter_id" pk="id" />
+			</fk>
+			<fk name="fk_chapters_items_learning_items" to_schema="public" to_table="learning_items" delete_action="cascade" update_action="cascade" >
+				<fk_column name="learning_item_id" pk="id" />
+			</fk>
+		</table>
+		<table name="curricula" prior="subjects_systems_grades" >
+			<column name="id" type="text" mandatory="y" />
+			<column name="systems_grades_id" type="text" mandatory="y" />
+			<column name="subject_id" type="text" mandatory="y" />
+			<index name="pk_subjects_systems_grades" unique="PRIMARY_KEY" >
+				<column name="systems_grades_id" />
+				<column name="subject_id" />
+			</index>
+			<index name="unq_curricula_id" unique="UNIQUE_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_curricula_systems_grades" to_schema="public" to_table="systems_grades" delete_action="cascade" update_action="cascade" >
+				<fk_column name="systems_grades_id" pk="id" />
+			</fk>
+			<fk name="fk_curricula_subjects" to_schema="public" to_table="subjects" delete_action="cascade" update_action="cascade" >
+				<fk_column name="subject_id" pk="id" />
+			</fk>
+		</table>
+		<table name="curriculum_chapters" prior="chapter_placements" >
+			<column name="id" type="text" />
+			<column name="curriculum_id" type="text" mandatory="y" />
+			<column name="chapter_id" type="text" mandatory="y" />
+			<index name="pk_curriculum_chapters" unique="PRIMARY_KEY" >
+				<column name="curriculum_id" />
+				<column name="chapter_id" />
+			</index>
+			<fk name="fk_curriculum_chapters_curricula" to_schema="public" to_table="curricula" delete_action="cascade" update_action="cascade" >
+				<fk_column name="curriculum_id" pk="id" />
+			</fk>
+			<fk name="fk_curriculum_chapters_chapters" to_schema="public" to_table="chapters" delete_action="cascade" update_action="cascade" >
+				<fk_column name="chapter_id" pk="id" />
+			</fk>
+		</table>
+		<table name="educational_systems" generator_rows="150" spec="" >
+			<column name="id" type="text" mandatory="y" />
+			<column name="name" type="text" mandatory="y" />
+			<index name="pk_educational_systems" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="grades" generator_rows="100" spec="" >
+			<column name="id" type="text" mandatory="y" />
+			<column name="name" type="text" mandatory="y" />
+			<index name="unq_grades_id" unique="UNIQUE_KEY" >
+				<column name="id" />
+			</index>
+			<index name="pk_grades" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="learning_items" generator_rows="100" spec="" >
+			<column name="id" type="text" mandatory="y" />
+			<column name="title" type="text" mandatory="y" />
+			<column name="type" type="learning_item_type" mandatory="y" />
+			<column name="source" type="text" />
+			<column name="created_at" type="timestamptz" mandatory="y" >
+				<defo><![CDATA[now()]]></defo>
+			</column>
+			<column name="updated_at" type="timestamptz" mandatory="y" >
+				<defo><![CDATA[now()]]></defo>
+			</column>
+			<index name="pk_learning_items" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="progresses" generator_rows="100" spec="" >
+			<column name="user_id" type="text" mandatory="y" />
+			<column name="learning_item_id" type="text" mandatory="y" />
+			<column name="progress" type="smallint" />
+			<column name="updated_at" type="timestamptz" mandatory="y" >
+				<defo><![CDATA[now()]]></defo>
+			</column>
+			<index name="pk_progresses" unique="PRIMARY_KEY" >
+				<column name="user_id" />
+				<column name="learning_item_id" />
+			</index>
+			<constraint name="cns_progresses_progress" >
+				<string><![CDATA[progress BETWEEN 0 AND 100]]></string>
+			</constraint>
+			<fk name="fk_progresses_users" to_schema="public" to_table="users" delete_action="cascade" update_action="cascade" >
+				<fk_column name="user_id" pk="id" />
+			</fk>
+			<fk name="fk_progresses_learning_items" to_schema="public" to_table="learning_items" delete_action="cascade" update_action="cascade" >
+				<fk_column name="learning_item_id" pk="id" />
+			</fk>
+		</table>
+		<table name="subjects" generator_rows="100" spec="" >
+			<column name="id" type="text" mandatory="y" />
+			<column name="name" type="text" mandatory="y" />
+			<column name="url_name" type="text" mandatory="y" >
+				<comment><![CDATA[a url friendly version of name]]></comment>
+			</column>
+			<column name="icon_path" type="text" mandatory="y" />
+			<index name="pk_subjects" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="systems_grades" prior="system_grades" generator_rows="100" >
+			<column name="id" type="text" mandatory="y" />
+			<column name="system_id" type="text" mandatory="y" />
+			<column name="grade_id" type="text" mandatory="y" />
+			<index name="pk_systems_grades" unique="PRIMARY_KEY" >
+				<column name="system_id" />
+				<column name="grade_id" />
+			</index>
+			<index name="unq_systems_grades_id" unique="UNIQUE_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_systems_grades_educational_systems" to_schema="public" to_table="educational_systems" delete_action="cascade" update_action="cascade" >
+				<fk_column name="system_id" pk="id" />
+			</fk>
+			<fk name="fk_systems_grades_grades" to_schema="public" to_table="grades" delete_action="cascade" update_action="cascade" >
+				<fk_column name="grade_id" pk="id" />
+			</fk>
+		</table>
+		<table name="users" generator_rows="100" spec="" >
+			<column name="id" type="text" mandatory="y" />
+			<column name="username" type="text" mandatory="y" />
+			<column name="full_name" type="text" mandatory="y" />
+			<column name="role" type="user_role" mandatory="y" />
+			<column name="password_hash" type="text" mandatory="y" />
+			<column name="created_at" type="timestamptz" mandatory="y" >
+				<defo><![CDATA[now()]]></defo>
+			</column>
+			<index name="unq_users_username" unique="UNIQUE_KEY" >
+				<column name="username" />
+			</index>
+			<index name="pk_users" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+	</schema>
+	<diagram_group name="Default" id="48a3436d-e83c-40ab-84b5-f411e264e233" >
+		<diagram name="Diagram" id="1490e580-aa1d-43f3-a717-967ffb4de7f9" show_relation="columns" >
+			<entity schema="public" name="chapters" color="BED3F4" x="665" y="475" />
+			<entity schema="public" name="chapters_items" color="BED3F4" x="836" y="494" />
+			<entity schema="public" name="curricula" color="BED3F4" x="133" y="494" />
+			<entity schema="public" name="curriculum_chapters" color="BED3F4" x="399" y="475" />
+			<entity schema="public" name="educational_systems" color="BED3F4" x="513" y="114" />
+			<entity schema="public" name="grades" color="BED3F4" x="266" y="95" />
+			<entity schema="public" name="learning_items" color="C7F4BE" x="1121" y="456" />
+			<entity schema="public" name="progresses" color="C7F4BE" x="1539" y="228" />
+			<entity schema="public" name="subjects" color="BED3F4" x="57" y="228" />
+			<entity schema="public" name="systems_grades" color="BED3F4" x="361" y="247" />
+			<entity schema="public" name="users" color="C7F4BE" x="1311" y="228" />
+			<group name="Group_user" color="FFFF00" >
+				<entity schema="public" name="progresses" />
+				<entity schema="public" name="users" />
+			</group>
+			<group name="Group_Curriculum_Structure" color="000080" >
+				<entity schema="public" name="chapters" />
+				<entity schema="public" name="chapters_items" />
+				<entity schema="public" name="curricula" />
+				<entity schema="public" name="curriculum_chapters" />
+				<entity schema="public" name="educational_systems" />
+				<entity schema="public" name="grades" />
+				<entity schema="public" name="learning_items" />
+				<entity schema="public" name="subjects" />
+				<entity schema="public" name="systems_grades" />
+			</group>
+		</diagram>
+	</diagram_group>
+</project>

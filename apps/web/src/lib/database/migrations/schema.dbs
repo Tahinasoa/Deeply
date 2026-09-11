@@ -1,0 +1,453 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="PostgreSQL" database="PostgreSQL" id="de95d726-1cee-4e96-8334-b2846a077acf" >
+	<migration_folder><![CDATA[C:\Users\tahinasoa\Documents\Deeply\apps\web\src\lib\database\migrations]]></migration_folder>
+	<schema name="public" >
+		<udt name="learning_item_type" udt_value_type="VARCHAR" udt_precision="NONE" sync_priority="900" >
+			<udt_script><![CDATA[CREATE TYPE ${name} AS ENUM (
+	'course',
+	'practice',
+	'solved_exercise')]]></udt_script>
+		</udt>
+		<udt name="user_role" udt_value_type="VARCHAR" udt_precision="NONE" sync_priority="900" >
+			<udt_script><![CDATA[CREATE TYPE ${name} AS ENUM (
+	'student',
+	'teacher',
+	'admin')]]></udt_script>
+		</udt>
+		<table name="chapters" generator_rows="100" spec="" >
+			<column name="id" type="text" mandatory="y" />
+			<column name="title" type="text" mandatory="y" />
+			<column name="description" type="text" mandatory="y" />
+			<index name="pk_chapters" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="chapters_items" generator_rows="100" spec="" >
+			<column name="chapter_id" type="text" mandatory="y" />
+			<column name="learning_item_id" type="text" mandatory="y" />
+			<index name="pk_chapters_items" unique="PRIMARY_KEY" >
+				<column name="chapter_id" />
+				<column name="learning_item_id" />
+			</index>
+			<fk name="fk_chapters_items_chapters" to_schema="public" to_table="chapters" delete_action="cascade" update_action="cascade" >
+				<fk_column name="chapter_id" pk="id" />
+			</fk>
+			<fk name="fk_chapters_items_learning_items" to_schema="public" to_table="learning_items" delete_action="cascade" update_action="cascade" >
+				<fk_column name="learning_item_id" pk="id" />
+			</fk>
+		</table>
+		<table name="curricula" prior="subjects_systems_grades" >
+			<column name="id" type="text" mandatory="y" />
+			<column name="systems_grades_id" type="text" mandatory="y" />
+			<column name="subject_id" type="text" mandatory="y" />
+			<index name="pk_subjects_systems_grades" unique="PRIMARY_KEY" >
+				<column name="systems_grades_id" />
+				<column name="subject_id" />
+			</index>
+			<index name="unq_curricula_id" unique="UNIQUE_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_curricula_systems_grades" to_schema="public" to_table="systems_grades" delete_action="cascade" update_action="cascade" >
+				<fk_column name="systems_grades_id" pk="id" />
+			</fk>
+			<fk name="fk_curricula_subjects" to_schema="public" to_table="subjects" delete_action="cascade" update_action="cascade" >
+				<fk_column name="subject_id" pk="id" />
+			</fk>
+		</table>
+		<table name="curriculum_chapters" prior="chapter_placements" >
+			<column name="id" type="text" />
+			<column name="curriculum_id" type="text" mandatory="y" />
+			<column name="chapter_id" type="text" mandatory="y" />
+			<index name="pk_curriculum_chapters" unique="PRIMARY_KEY" >
+				<column name="curriculum_id" />
+				<column name="chapter_id" />
+			</index>
+			<fk name="fk_curriculum_chapters_curricula" to_schema="public" to_table="curricula" delete_action="cascade" update_action="cascade" >
+				<fk_column name="curriculum_id" pk="id" />
+			</fk>
+			<fk name="fk_curriculum_chapters_chapters" to_schema="public" to_table="chapters" delete_action="cascade" update_action="cascade" >
+				<fk_column name="chapter_id" pk="id" />
+			</fk>
+		</table>
+		<table name="educational_systems" generator_rows="150" spec="" >
+			<column name="id" type="text" mandatory="y" />
+			<column name="name" type="text" mandatory="y" />
+			<index name="pk_educational_systems" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="grades" generator_rows="100" spec="" >
+			<column name="id" type="text" mandatory="y" />
+			<column name="name" type="text" mandatory="y" />
+			<index name="unq_grades_id" unique="UNIQUE_KEY" >
+				<column name="id" />
+			</index>
+			<index name="pk_grades" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="learning_items" generator_rows="100" spec="" >
+			<column name="id" type="text" mandatory="y" />
+			<column name="title" type="text" mandatory="y" />
+			<column name="type" type="learning_item_type" mandatory="y" />
+			<column name="source" type="text" />
+			<column name="created_at" type="timestamptz" mandatory="y" >
+				<defo><![CDATA[now()]]></defo>
+			</column>
+			<column name="updated_at" type="timestamptz" mandatory="y" >
+				<defo><![CDATA[now()]]></defo>
+			</column>
+			<index name="pk_learning_items" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="progresses" generator_rows="100" spec="" >
+			<column name="user_id" type="text" mandatory="y" />
+			<column name="learning_item_id" type="text" mandatory="y" />
+			<column name="progress" type="smallint" />
+			<column name="updated_at" type="timestamptz" mandatory="y" >
+				<defo><![CDATA[now()]]></defo>
+			</column>
+			<index name="pk_progresses" unique="PRIMARY_KEY" >
+				<column name="user_id" />
+				<column name="learning_item_id" />
+			</index>
+			<constraint name="cns_progresses_progress" >
+				<string><![CDATA[progress BETWEEN 0 AND 100]]></string>
+			</constraint>
+			<fk name="fk_progresses_users" to_schema="public" to_table="users" delete_action="cascade" update_action="cascade" >
+				<fk_column name="user_id" pk="id" />
+			</fk>
+			<fk name="fk_progresses_learning_items" to_schema="public" to_table="learning_items" delete_action="cascade" update_action="cascade" >
+				<fk_column name="learning_item_id" pk="id" />
+			</fk>
+		</table>
+		<table name="subjects" generator_rows="100" spec="" >
+			<column name="id" type="text" mandatory="y" />
+			<column name="name" type="text" mandatory="y" />
+			<column name="url_name" type="text" mandatory="y" >
+				<comment><![CDATA[a url friendly version of name]]></comment>
+			</column>
+			<column name="icon_path" type="text" mandatory="y" />
+			<index name="pk_subjects" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="systems_grades" prior="system_grades" generator_rows="100" >
+			<column name="id" type="text" mandatory="y" />
+			<column name="system_id" type="text" mandatory="y" />
+			<column name="grade_id" type="text" mandatory="y" />
+			<index name="pk_systems_grades" unique="PRIMARY_KEY" >
+				<column name="system_id" />
+				<column name="grade_id" />
+			</index>
+			<index name="unq_systems_grades_id" unique="UNIQUE_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_systems_grades_educational_systems" to_schema="public" to_table="educational_systems" delete_action="cascade" update_action="cascade" >
+				<fk_column name="system_id" pk="id" />
+			</fk>
+			<fk name="fk_systems_grades_grades" to_schema="public" to_table="grades" delete_action="cascade" update_action="cascade" >
+				<fk_column name="grade_id" pk="id" />
+			</fk>
+		</table>
+		<table name="users" generator_rows="100" spec="" >
+			<column name="id" type="text" mandatory="y" />
+			<column name="username" type="text" mandatory="y" />
+			<column name="full_name" type="text" mandatory="y" />
+			<column name="role" type="user_role" mandatory="y" />
+			<column name="password_hash" type="text" mandatory="y" />
+			<column name="created_at" type="timestamptz" mandatory="y" >
+				<defo><![CDATA[now()]]></defo>
+			</column>
+			<index name="unq_users_username" unique="UNIQUE_KEY" >
+				<column name="username" />
+			</index>
+			<index name="pk_users" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+	</schema>
+	<diagram_group name="Default" id="48a3436d-e83c-40ab-84b5-f411e264e233" >
+		<diagram name="Diagram" id="1490e580-aa1d-43f3-a717-967ffb4de7f9" show_relation="columns" >
+			<entity schema="public" name="chapters" color="BED3F4" x="665" y="475" />
+			<entity schema="public" name="chapters_items" color="BED3F4" x="836" y="494" />
+			<entity schema="public" name="curricula" color="BED3F4" x="133" y="494" />
+			<entity schema="public" name="curriculum_chapters" color="BED3F4" x="399" y="475" />
+			<entity schema="public" name="educational_systems" color="BED3F4" x="513" y="114" />
+			<entity schema="public" name="grades" color="BED3F4" x="266" y="95" />
+			<entity schema="public" name="learning_items" color="C7F4BE" x="1121" y="456" />
+			<entity schema="public" name="progresses" color="C7F4BE" x="1539" y="228" />
+			<entity schema="public" name="subjects" color="BED3F4" x="57" y="228" />
+			<entity schema="public" name="systems_grades" color="BED3F4" x="361" y="247" />
+			<entity schema="public" name="users" color="C7F4BE" x="1311" y="228" />
+			<group name="Group_user" color="FFFF00" >
+				<entity schema="public" name="progresses" />
+				<entity schema="public" name="users" />
+			</group>
+			<group name="Group_Curriculum_Structure" color="000080" >
+				<entity schema="public" name="chapters" />
+				<entity schema="public" name="chapters_items" />
+				<entity schema="public" name="curricula" />
+				<entity schema="public" name="curriculum_chapters" />
+				<entity schema="public" name="educational_systems" />
+				<entity schema="public" name="grades" />
+				<entity schema="public" name="learning_items" />
+				<entity schema="public" name="subjects" />
+				<entity schema="public" name="systems_grades" />
+			</group>
+			<script name="SQL_Editor" id="4f036bf4-b519-4a7f-9028-d9aed13f6ef3" language="SQL" >
+				<string><![CDATA[-- =========================================================
+-- SEED DATA
+-- =========================================================
+
+-- ---------------------------------------------------------
+-- EDUCATIONAL SYSTEMS
+-- ---------------------------------------------------------
+INSERT INTO "public".educational_systems (id, name) VALUES
+('es_en', 'English System'),
+('es_fr', 'Systeme Francais'),
+('es_mg', 'Systeme Malagasy');
+
+-- ---------------------------------------------------------
+-- GRADES
+-- EN system uses US-style grade names.
+-- FR and MG systems SHARE the same grade rows (francophone).
+-- ---------------------------------------------------------
+INSERT INTO "public".grades (id, name) VALUES
+-- EN grades
+('gr_6th',  '6th Grade'),
+('gr_7th',  '7th Grade'),
+('gr_8th',  '8th Grade'),
+('gr_9th',  '9th Grade'),
+('gr_10th', '10th Grade'),
+('gr_11th', '11th Grade'),
+('gr_12th', '12th Grade'),
+-- FR/MG shared grades
+('gr_6e',    '6eme'),
+('gr_5e',    '5eme'),
+('gr_4e',    '4eme'),
+('gr_3e',    '3eme'),
+('gr_2nd',   'Seconde'),
+('gr_1ere',  'Premiere'),
+('gr_term',  'Terminale');
+
+-- ---------------------------------------------------------
+-- SYSTEMS_GRADES (junction: which grades exist in which system)
+-- Note: FR and MG both reference the SAME grade ids (gr_6e, gr_3e, ...)
+-- ---------------------------------------------------------
+INSERT INTO "public".systems_grades (id, system_id, grade_id) VALUES
+-- EN
+('sg_en_6th',  'es_en', 'gr_6th'),
+('sg_en_7th',  'es_en', 'gr_7th'),
+('sg_en_8th',  'es_en', 'gr_8th'),
+('sg_en_9th',  'es_en', 'gr_9th'),
+('sg_en_10th', 'es_en', 'gr_10th'),
+('sg_en_11th', 'es_en', 'gr_11th'),
+('sg_en_12th', 'es_en', 'gr_12th'),
+-- FR
+('sg_fr_6e',   'es_fr', 'gr_6e'),
+('sg_fr_5e',   'es_fr', 'gr_5e'),
+('sg_fr_4e',   'es_fr', 'gr_4e'),
+('sg_fr_3e',   'es_fr', 'gr_3e'),
+('sg_fr_2nd',  'es_fr', 'gr_2nd'),
+('sg_fr_1ere', 'es_fr', 'gr_1ere'),
+('sg_fr_term', 'es_fr', 'gr_term'),
+-- MG (shares the same grade rows as FR)
+('sg_mg_6e',   'es_mg', 'gr_6e'),
+('sg_mg_5e',   'es_mg', 'gr_5e'),
+('sg_mg_4e',   'es_mg', 'gr_4e'),
+('sg_mg_3e',   'es_mg', 'gr_3e'),
+('sg_mg_2nd',  'es_mg', 'gr_2nd'),
+('sg_mg_1ere', 'es_mg', 'gr_1ere'),
+('sg_mg_term', 'es_mg', 'gr_term');
+
+-- ---------------------------------------------------------
+-- SUBJECTS
+-- Math / Sciences / Chinese are shared across ALL systems.
+-- Francais / Histoire-Geo / EPS are shared between FR and MG only.
+-- Espagnol -> FR only. Malagasy -> MG only. English -> EN only.
+-- ---------------------------------------------------------
+INSERT INTO "public".subjects (id, name, url_name, icon_path) VALUES
+('sub_math',     'Mathematics',      'mathematics',      '/icons/math.svg'),
+('sub_science',  'Science',          'science',          '/icons/science.svg'),
+('sub_chinese',  'Chinese',          'chinese',          '/icons/chinese.svg'),
+('sub_french',   'Francais',         'francais',         '/icons/french.svg'),
+('sub_histgeo',  'Histoire-Geo',     'histoire-geo',     '/icons/histgeo.svg'),
+('sub_pe',       'EPS',              'eps',              '/icons/pe.svg'),
+('sub_english',  'English',          'english',          '/icons/english.svg'),
+('sub_spanish',  'Espagnol',         'espagnol',         '/icons/spanish.svg'),
+('sub_malagasy', 'Malagasy',         'malagasy',         '/icons/malagasy.svg');
+
+-- ---------------------------------------------------------
+-- CURRICULA (systems_grades + subject)
+-- Limited to 2 grade levels per system (start + mid) to keep the
+-- seed readable. Extend the same pattern for the other grades.
+-- ---------------------------------------------------------
+INSERT INTO "public".curricula (id, systems_grades_id, subject_id) VALUES
+-- EN - 6th grade
+('cur_en6_math',    'sg_en_6th', 'sub_math'),
+('cur_en6_science', 'sg_en_6th', 'sub_science'),
+('cur_en6_english', 'sg_en_6th', 'sub_english'),
+('cur_en6_chinese', 'sg_en_6th', 'sub_chinese'),
+-- EN - 9th grade
+('cur_en9_math',    'sg_en_9th', 'sub_math'),
+('cur_en9_science', 'sg_en_9th', 'sub_science'),
+('cur_en9_english', 'sg_en_9th', 'sub_english'),
+('cur_en9_chinese', 'sg_en_9th', 'sub_chinese'),
+('cur_en9_pe',      'sg_en_9th', 'sub_pe'),
+
+-- FR - 6eme
+('cur_fr6_math',    'sg_fr_6e', 'sub_math'),
+('cur_fr6_french',  'sg_fr_6e', 'sub_french'),
+('cur_fr6_science', 'sg_fr_6e', 'sub_science'),
+('cur_fr6_histgeo', 'sg_fr_6e', 'sub_histgeo'),
+('cur_fr6_spanish', 'sg_fr_6e', 'sub_spanish'),
+('cur_fr6_chinese', 'sg_fr_6e', 'sub_chinese'),
+-- FR - 3eme
+('cur_fr3_math',    'sg_fr_3e', 'sub_math'),
+('cur_fr3_french',  'sg_fr_3e', 'sub_french'),
+('cur_fr3_science', 'sg_fr_3e', 'sub_science'),
+('cur_fr3_histgeo', 'sg_fr_3e', 'sub_histgeo'),
+('cur_fr3_spanish', 'sg_fr_3e', 'sub_spanish'),
+('cur_fr3_chinese', 'sg_fr_3e', 'sub_chinese'),
+('cur_fr3_pe',      'sg_fr_3e', 'sub_pe'),
+
+-- MG - 6eme
+('cur_mg6_math',    'sg_mg_6e', 'sub_math'),
+('cur_mg6_french',  'sg_mg_6e', 'sub_french'),
+('cur_mg6_science', 'sg_mg_6e', 'sub_science'),
+('cur_mg6_histgeo', 'sg_mg_6e', 'sub_histgeo'),
+('cur_mg6_malagasy','sg_mg_6e', 'sub_malagasy'),
+('cur_mg6_chinese', 'sg_mg_6e', 'sub_chinese'),
+-- MG - 3eme
+('cur_mg3_math',    'sg_mg_3e', 'sub_math'),
+('cur_mg3_french',  'sg_mg_3e', 'sub_french'),
+('cur_mg3_science', 'sg_mg_3e', 'sub_science'),
+('cur_mg3_histgeo', 'sg_mg_3e', 'sub_histgeo'),
+('cur_mg3_malagasy','sg_mg_3e', 'sub_malagasy'),
+('cur_mg3_chinese', 'sg_mg_3e', 'sub_chinese'),
+('cur_mg3_pe',      'sg_mg_3e', 'sub_pe');
+
+-- ---------------------------------------------------------
+-- CHAPTERS
+-- Some chapters are reused across systems/grades/subjects on purpose,
+-- to demonstrate the many-to-many via curriculum_chapters.
+-- ---------------------------------------------------------
+INSERT INTO "public".chapters (id, title, description) VALUES
+-- Math chapters (shared across EN/FR/MG at "beginner" level)
+('ch_fractions',    'Fractions',              'Introduction aux fractions: numerateur, denominateur, simplification.'),
+('ch_algebra_basic','Basic Algebra',          'Equations simples et manipulation d''inconnues.'),
+('ch_geometry',     'Geometrie de base',      'Figures planes, perimetre et aire.'),
+-- Science chapters
+('ch_photosynth',   'Photosynthese',          'Comment les plantes produisent leur energie.'),
+('ch_atoms',        'Atomes et molecules',    'Structure de la matiere.'),
+-- Chinese chapters (shared across the 3 systems)
+('ch_cn_numbers',   'Chinese Numbers 1-100',  'Apprendre a compter et lire les nombres en chinois.'),
+('ch_cn_greetings', 'Chinese Greetings',      'Salutations et expressions de base en chinois.'),
+-- Language-specific chapters
+('ch_french_gram',  'Grammaire francaise',    'Conjugaison et accords de base.'),
+('ch_spanish_intro','Introduccion al espanol','Vocabulaire et phrases de base en espagnol.'),
+('ch_malagasy_intro','Fampidirana ny teny Malagasy','Voambolana sy fehezanteny fototra.'),
+('ch_english_gram', 'English Grammar Basics', 'Tenses and sentence structure.'),
+-- History-Geo
+('ch_histgeo_intro','Introduction a la geographie', 'Reperes geographiques de base.');
+
+-- ---------------------------------------------------------
+-- CURRICULUM_CHAPTERS (many-to-many: a chapter can appear in
+-- several curricula, across different systems/grades/subjects)
+-- ---------------------------------------------------------
+INSERT INTO "public".curriculum_chapters (id, curriculum_id, chapter_id) VALUES
+-- "Fractions" reused across EN-6th, FR-6eme and MG-6eme Math
+('cc_001', 'cur_en6_math', 'ch_fractions'),
+('cc_002', 'cur_fr6_math', 'ch_fractions'),
+('cc_003', 'cur_mg6_math', 'ch_fractions'),
+
+-- "Basic Algebra" reused at the "mid" grade level across all 3 systems
+('cc_004', 'cur_en9_math', 'ch_algebra_basic'),
+('cc_005', 'cur_fr3_math', 'ch_algebra_basic'),
+('cc_006', 'cur_mg3_math', 'ch_algebra_basic'),
+
+-- Geometry only at the 6th/6eme level for now
+('cc_007', 'cur_en6_math', 'ch_geometry'),
+('cc_008', 'cur_fr6_math', 'ch_geometry'),
+('cc_009', 'cur_mg6_math', 'ch_geometry'),
+
+-- Science chapters shared across systems
+('cc_010', 'cur_en6_science', 'ch_photosynth'),
+('cc_011', 'cur_fr6_science', 'ch_photosynth'),
+('cc_012', 'cur_mg6_science', 'ch_photosynth'),
+('cc_013', 'cur_en9_science', 'ch_atoms'),
+('cc_014', 'cur_fr3_science', 'ch_atoms'),
+('cc_015', 'cur_mg3_science', 'ch_atoms'),
+
+-- Chinese chapters shared across all 3 systems' Chinese curricula
+('cc_016', 'cur_en6_chinese', 'ch_cn_numbers'),
+('cc_017', 'cur_fr6_chinese', 'ch_cn_numbers'),
+('cc_018', 'cur_mg6_chinese', 'ch_cn_numbers'),
+('cc_019', 'cur_en9_chinese', 'ch_cn_greetings'),
+('cc_020', 'cur_fr3_chinese', 'ch_cn_greetings'),
+('cc_021', 'cur_mg3_chinese', 'ch_cn_greetings'),
+
+-- Language-specific chapters (not shared)
+('cc_022', 'cur_fr6_french',  'ch_french_gram'),
+('cc_023', 'cur_mg6_french',  'ch_french_gram'),  -- Francais chapter shared between FR and MG
+('cc_024', 'cur_fr6_spanish', 'ch_spanish_intro'),
+('cc_025', 'cur_mg6_malagasy','ch_malagasy_intro'),
+('cc_026', 'cur_en6_english', 'ch_english_gram'),
+
+-- History-Geo shared between FR and MG
+('cc_027', 'cur_fr6_histgeo', 'ch_histgeo_intro'),
+('cc_028', 'cur_mg6_histgeo', 'ch_histgeo_intro');
+
+-- ---------------------------------------------------------
+-- LEARNING_ITEMS
+-- ---------------------------------------------------------
+INSERT INTO "public".learning_items (id, title, "type", "source") VALUES
+('li_frac_course',   'Fractions - Cours',              'course',          'internal'),
+('li_frac_practice', 'Fractions - Exercices',          'practice',        'internal'),
+('li_frac_solved',   'Fractions - Exercice corrige',   'solved_exercise', 'internal'),
+('li_algebra_course','Algebra Basics - Course',        'course',          'internal'),
+('li_algebra_prac',  'Algebra Basics - Practice Set',  'practice',        'internal'),
+('li_geo_course',    'Geometrie - Cours',              'course',          'internal'),
+('li_photo_course',  'Photosynthese - Cours',          'course',          'internal'),
+('li_photo_solved',  'Photosynthese - Exercice corrige','solved_exercise','internal'),
+('li_atoms_course',  'Atomes - Cours',                 'course',          'internal'),
+('li_cn_numbers_course', 'Chinese Numbers - Course',   'course',          'internal'),
+('li_cn_numbers_prac',   'Chinese Numbers - Practice', 'practice',        'internal'),
+('li_cn_greet_course',   'Chinese Greetings - Course', 'course',          'internal'),
+('li_fr_gram_course','Grammaire - Cours',              'course',          'internal'),
+('li_es_intro_course','Espanol Intro - Curso',         'course',          'internal'),
+('li_mg_intro_course','Teny Malagasy - Lesona',        'course',          'internal'),
+('li_en_gram_course','English Grammar - Course',       'course',          'internal'),
+('li_histgeo_course','Geographie - Cours',             'course',          'internal');
+
+-- ---------------------------------------------------------
+-- CHAPTERS_ITEMS
+-- "li_frac_practice" is reused in both the Fractions chapter
+-- AND the Basic Algebra chapter, to show a learning_item
+-- appearing in multiple chapters.
+-- ---------------------------------------------------------
+INSERT INTO "public".chapters_items (chapter_id, learning_item_id) VALUES
+('ch_fractions',     'li_frac_course'),
+('ch_fractions',     'li_frac_practice'),
+('ch_fractions',     'li_frac_solved'),
+('ch_algebra_basic', 'li_algebra_course'),
+('ch_algebra_basic', 'li_algebra_prac'),
+('ch_algebra_basic', 'li_frac_practice'),   -- shared: fractions practice reused as prerequisite drill
+('ch_geometry',      'li_geo_course'),
+('ch_photosynth',    'li_photo_course'),
+('ch_photosynth',    'li_photo_solved'),
+('ch_atoms',         'li_atoms_course'),
+('ch_cn_numbers',    'li_cn_numbers_course'),
+('ch_cn_numbers',    'li_cn_numbers_prac'),
+('ch_cn_greetings',  'li_cn_greet_course'),
+('ch_french_gram',   'li_fr_gram_course'),
+('ch_spanish_intro', 'li_es_intro_course'),
+('ch_malagasy_intro','li_mg_intro_course'),
+('ch_english_gram',  'li_en_gram_course'),
+('ch_histgeo_intro', 'li_histgeo_course');]]></string>
+			</script>
+		</diagram>
+	</diagram_group>
+</project>

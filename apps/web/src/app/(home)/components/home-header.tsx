@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Globe, GraduationCap, User, Settings, HelpCircle, LogOut, ChevronDown } from "lucide-react";
+import { Globe, GraduationCap, User as UserIcon, Settings, HelpCircle, LogOut, ChevronDown } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {
     DropdownMenu,
@@ -10,8 +10,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import {User} from "@/types/user-session";
 
-function HomeHeader() {
+function HomeHeader({user}:{user:User | null}) {
     return (
         <header className="flex items-center justify-between px-8 py-3 bg-background border-b border-border">
             {/* Logo + name */}
@@ -71,15 +72,15 @@ function HomeHeader() {
                     >
                         <Avatar className="size-8">
                             <AvatarImage src="" />
-                            <AvatarFallback>T</AvatarFallback>
+                            <AvatarFallback>{user ? user.username.charAt(0).toUpperCase() : "?"}</AvatarFallback>
                         </Avatar>
-                        <span className="font-medium text-foreground">Tahinasoa R.</span>
+                        <span className="font-medium text-foreground">{user ? user.username : "Anonyme"}</span>
                         <ChevronDown className="size-4 text-muted-foreground" />
                     </DropdownMenuTrigger>
 
                     <DropdownMenuContent align="end" className="w-56">
                         <DropdownMenuItem>
-                            <User className="size-4 mr-2" />
+                            <UserIcon className="size-4 mr-2" />
                             Mon profil
                         </DropdownMenuItem>
                         <DropdownMenuItem>
