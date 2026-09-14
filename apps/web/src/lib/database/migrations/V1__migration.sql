@@ -25,6 +25,7 @@ CREATE  TABLE "public".educational_systems (
 
 CREATE  TABLE "public".grades ( 
 	id                   text  NOT NULL  ,
+	system_id            text  NOT NULL  ,
 	name                 text  NOT NULL  ,
 	CONSTRAINT unq_grades_id UNIQUE ( id ) ,
 	CONSTRAINT pk_grades PRIMARY KEY ( id )
@@ -56,27 +57,18 @@ CREATE  TABLE "public".subjects (
 
 COMMENT ON COLUMN "public".subjects.url_name IS 'a url friendly version of name';
 
-CREATE  TABLE "public".systems_grades ( 
-	id                   text  NOT NULL  ,
-	system_id            text  NOT NULL  ,
-	grade_id             text  NOT NULL  ,
-	CONSTRAINT pk_systems_grades PRIMARY KEY ( system_id, grade_id ),
-	CONSTRAINT unq_systems_grades_id UNIQUE ( id ) 
- );
-
 CREATE  TABLE "public".curricula ( 
 	id                   text  NOT NULL  ,
-	systems_grades_id    text  NOT NULL  ,
+	grade_id             text  NOT NULL  ,
 	subject_id           text  NOT NULL  ,
-	CONSTRAINT pk_subjects_systems_grades PRIMARY KEY ( systems_grades_id, subject_id ),
-	CONSTRAINT unq_curricula_id UNIQUE ( id ) 
+	CONSTRAINT pk_curricula PRIMARY KEY ( grade_id, subject_id ),
+	CONSTRAINT unq_curricula UNIQUE ( id ) 
  );
 
-CREATE  TABLE "public".curriculum_chapters ( 
-	id                   text    ,
-	curriculum_id        text  NOT NULL  ,
+CREATE  TABLE "public".chapters_curricula ( 
 	chapter_id           text  NOT NULL  ,
-	CONSTRAINT pk_curriculum_chapters PRIMARY KEY ( curriculum_id, chapter_id )
+	curriculum_id        text  NOT NULL  ,
+	CONSTRAINT pk_chapters_curricula PRIMARY KEY ( chapter_id, curriculum_id )
  );
 
 CREATE  TABLE "public".users ( 
@@ -100,22 +92,21 @@ CREATE  TABLE "public".progresses (
 
 ALTER TABLE "public".progresses ADD CONSTRAINT cns_progresses_progress CHECK ( progress BETWEEN 0 AND 100 );
 
+ALTER TABLE "public".chapters_curricula ADD CONSTRAINT fk_chapters_curricula_chapters FOREIGN KEY ( chapter_id ) REFERENCES "public".chapters( id );
+
+ALTER TABLE "public".chapters_curricula ADD CONSTRAINT fk_chapters_curricula_curricula FOREIGN KEY ( curriculum_id ) REFERENCES "public".curricula( id );
+
 ALTER TABLE "public".chapters_items ADD CONSTRAINT fk_chapters_items_chapters FOREIGN KEY ( chapter_id ) REFERENCES "public".chapters( id ) ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE "public".chapters_items ADD CONSTRAINT fk_chapters_items_learning_items FOREIGN KEY ( learning_item_id ) REFERENCES "public".learning_items( id ) ON DELETE CASCADE ON UPDATE CASCADE;
 
-ALTER TABLE "public".curricula ADD CONSTRAINT fk_curricula_systems_grades FOREIGN KEY ( systems_grades_id ) REFERENCES "public".systems_grades( id ) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "public".curricula ADD CONSTRAINT fk_curricula_grades FOREIGN KEY ( grade_id ) REFERENCES "public".grades( id ) ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE "public".curricula ADD CONSTRAINT fk_curricula_subjects FOREIGN KEY ( subject_id ) REFERENCES "public".subjects( id ) ON DELETE CASCADE ON UPDATE CASCADE;
 
-ALTER TABLE "public".curriculum_chapters ADD CONSTRAINT fk_curriculum_chapters_curricula FOREIGN KEY ( curriculum_id ) REFERENCES "public".curricula( id ) ON DELETE CASCADE ON UPDATE CASCADE;
-
-ALTER TABLE "public".curriculum_chapters ADD CONSTRAINT fk_curriculum_chapters_chapters FOREIGN KEY ( chapter_id ) REFERENCES "public".chapters( id ) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "public".grades ADD CONSTRAINT fk_grades_educational_systems FOREIGN KEY ( system_id ) REFERENCES "public".educational_systems( id ) ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE "public".progresses ADD CONSTRAINT fk_progresses_users FOREIGN KEY ( user_id ) REFERENCES "public".users( id ) ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE "public".progresses ADD CONSTRAINT fk_progresses_learning_items FOREIGN KEY ( learning_item_id ) REFERENCES "public".learning_items( id ) ON DELETE CASCADE ON UPDATE CASCADE;
 
-ALTER TABLE "public".systems_grades ADD CONSTRAINT fk_systems_grades_educational_systems FOREIGN KEY ( system_id ) REFERENCES "public".educational_systems( id ) ON DELETE CASCADE ON UPDATE CASCADE;
-
-ALTER TABLE "public".systems_grades ADD CONSTRAINT fk_systems_grades_grades FOREIGN KEY ( grade_id ) REFERENCES "public".grades( id ) ON DELETE CASCADE ON UPDATE CASCADE;
