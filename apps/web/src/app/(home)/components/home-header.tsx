@@ -11,6 +11,9 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {User} from "@/types/user-session";
+import Link from "next/link";
+import { signOut } from "next-auth/react";
+import LogoutMenuItem from "./logoutMenuItem";
 
 function HomeHeader({user}:{user:User | null}) {
     return (
@@ -92,10 +95,7 @@ function HomeHeader({user}:{user:User | null}) {
                             Aide
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem>
-                            <LogOut className="size-4 mr-2" />
-                            Se déconnecter
-                        </DropdownMenuItem>
+                        <LogoutMenuItem />
                     </DropdownMenuContent>
                 </DropdownMenu>
             </div>
