@@ -7,6 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useState } from "react";
 
 export type LabeledSelectOption = {
   value: string;
@@ -20,9 +21,10 @@ type LabeledSelectProps = {
   triggerClassName?: string;
   value?: string;
   defaultValue?: string;
-  onValueChange?: (value: string) => void;
+  onValueChange?: (value: string|null) => void;
   disabled?: boolean;
   name?: string;
+  key?:string
 };
 
 // Base UI's SelectValue needs a render function to map value -> label.
@@ -37,13 +39,14 @@ export function LabeledSelect({
   disabled,
   name,
 }: LabeledSelectProps) {
+  const [currentValue, setValue] = useState<string|null>(value||null) ;
   const labels = new Map(options.map((o) => [o.value, o.label]));
 
   return (
     <Select
-      value={value}
+      value={currentValue}
       defaultValue={defaultValue}
-      onValueChange={(val: unknown) => onValueChange?.(val as string)}
+      onValueChange={(val: string|null) => {setValue(val);  onValueChange?.(val)}}
       disabled={disabled}
       name={name}
     >

@@ -9,33 +9,30 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import {User} from "@/types/user-session";
+import { User } from "@/types/user-session";
 import LogoutMenuItem from "./logoutMenuItem";
 import { getEducationalSystems, getGradeLevels } from "@/lib/database/contents/curriculum";
 import { LabeledSelect } from "@/components/ui/labeled-select";
 import { redirect } from "next/navigation";
+import { EducationalSystemSelect, GradeLevelSelect } from "./curriculumSelects";
 
-async function HomeHeader({user, system, grade}:{user:User | null, system:string|string[]|undefined, grade:string|string[]|undefined}) {
-
-    const educationalSystems = await getEducationalSystems() ;
-    const educationalSystemOptions = educationalSystems.map(sys=>({
+async function HomeHeader({ user, currentSystemId, currentGradeId, systems, grades }:
+    {
+        user: User | null,
+        currentSystemId: string,
+        currentGradeId: string,
+        systems: { id: string, name: string }[],
+        grades: { id: string, name: string }[]
+    }
+) {
+    const systemOptions = systems.map(sys=>({
         value : sys.id,
         label : sys.name
     })) ;
-    const educationalSystemDefault = educationalSystems.find(sys=>sys.name==="Malagasy") ;
-    if(!system){
-        redirect(`/?system=${educationalSystemDefault?.id}`) ;
-    }
-    const educationalSystemCurrent = educationalSystems.find(sys=>sys.id===educationalSystemDefault?.id) ;
-    const currentSystem = educationalSystemCurrent || educationalSystemDefault ;
-
-    const grades = await getGradeLevels(educationalSystemDefault!.id) ;
     const gradeOptions = grades.map(gr=>({
         value : gr.id,
         label : gr.name
     })) ;
-    const gradeDefault = grades[0] ;
-
 
     return (
         <header className="flex items-center justify-between px-8 py-3 bg-background border-b border-border">
@@ -52,7 +49,7 @@ async function HomeHeader({user, system, grade}:{user:User | null, system:string
                     <Globe className="size-5 text-primary" />
                     <div className="flex flex-col">
                         <span className="text-xs text-muted-foreground leading-none mb-1">Système</span>
-                        <LabeledSelect options={educationalSystemOptions} defaultValue={currentSystem!.id}/>
+                        <EducationalSystemSelect options={systemOptions} value={currentSystemId} />
                     </div>
                 </div>
 
@@ -61,7 +58,7 @@ async function HomeHeader({user, system, grade}:{user:User | null, system:string
                     <GraduationCap className="size-5 text-primary" />
                     <div className="flex flex-col">
                         <span className="text-xs text-muted-foreground leading-none mb-1">Grade</span>
-                        <LabeledSelect options={gradeOptions} defaultValue={gradeDefault!.id}/>
+                        <GradeLevelSelect options={gradeOptions} value={currentGradeId} key={currentSystemId}/>
                     </div>
                 </div>
 
