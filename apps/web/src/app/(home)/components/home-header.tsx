@@ -1,6 +1,5 @@
 import Image from "next/image";
 import { Globe, GraduationCap, User as UserIcon, Settings, HelpCircle, LogOut, ChevronDown } from "lucide-react";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {
     DropdownMenu,
     DropdownMenuTrigger,
@@ -11,11 +10,33 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {User} from "@/types/user-session";
-import Link from "next/link";
-import { signOut } from "next-auth/react";
 import LogoutMenuItem from "./logoutMenuItem";
+import { getEducationalSystems, getGradeLevels } from "@/lib/database/contents/curriculum";
+import { LabeledSelect } from "@/components/ui/labeled-select";
+import { redirect } from "next/navigation";
 
-function HomeHeader({user}:{user:User | null}) {
+async function HomeHeader({user, system, grade}:{user:User | null, system:string|string[]|undefined, grade:string|string[]|undefined}) {
+
+    const educationalSystems = await getEducationalSystems() ;
+    const educationalSystemOptions = educationalSystems.map(sys=>({
+        value : sys.id,
+        label : sys.name
+    })) ;
+    const educationalSystemDefault = educationalSystems.find(sys=>sys.name==="Malagasy") ;
+    if(!system){
+        redirect(`/?system=${educationalSystemDefault?.id}`) ;
+    }
+    const educationalSystemCurrent = educationalSystems.find(sys=>sys.id===educationalSystemDefault?.id) ;
+    const currentSystem = educationalSystemCurrent || educationalSystemDefault ;
+
+    const grades = await getGradeLevels(educationalSystemDefault!.id) ;
+    const gradeOptions = grades.map(gr=>({
+        value : gr.id,
+        label : gr.name
+    })) ;
+    const gradeDefault = grades[0] ;
+
+
     return (
         <header className="flex items-center justify-between px-8 py-3 bg-background border-b border-border">
             {/* Logo + name */}
@@ -24,23 +45,14 @@ function HomeHeader({user}:{user:User | null}) {
                 <span className="text-xl font-bold text-foreground">Deeply</span>
             </div>
 
-            {/* Système + Grade + Profile */}
+            {/* System + Grade + Profile */}
             <div className="flex items-center gap-6">
-                {/* Système */}
+                {/* Systeme */}
                 <div className="flex items-center gap-2">
                     <Globe className="size-5 text-primary" />
                     <div className="flex flex-col">
                         <span className="text-xs text-muted-foreground leading-none mb-1">Système</span>
-                        <Select defaultValue="us">
-                            <SelectTrigger className="h-8 w-27.5">
-                                <SelectValue placeholder="Système" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="US">US</SelectItem>
-                                <SelectItem value="FR">FR</SelectItem>
-                                <SelectItem value="MG">MG</SelectItem>
-                            </SelectContent>
-                        </Select>
+                        <LabeledSelect options={educationalSystemOptions} defaultValue={currentSystem!.id}/>
                     </div>
                 </div>
 
@@ -49,20 +61,7 @@ function HomeHeader({user}:{user:User | null}) {
                     <GraduationCap className="size-5 text-primary" />
                     <div className="flex flex-col">
                         <span className="text-xs text-muted-foreground leading-none mb-1">Grade</span>
-                        <Select defaultValue="terminal">
-                            <SelectTrigger className="h-8 w-32.5">
-                                <SelectValue placeholder="Grade" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="6ème">6ème</SelectItem>
-                                <SelectItem value="5ème">5ème</SelectItem>
-                                <SelectItem value="4ème">4ème</SelectItem>
-                                <SelectItem value="3ème">3ème</SelectItem>
-                                <SelectItem value="2ème">2ème</SelectItem>
-                                <SelectItem value="1ère">1ère</SelectItem>
-                                <SelectItem value="terminal">Terminal</SelectItem>
-                            </SelectContent>
-                        </Select>
+                        <LabeledSelect options={gradeOptions} defaultValue={gradeDefault!.id}/>
                     </div>
                 </div>
 

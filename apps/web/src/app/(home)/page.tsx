@@ -10,7 +10,8 @@ import Subject from '@/app/(home)/components/subject-card'
 
 
 
-export default async function Home() {
+export default async function Home({searchParams}:{searchParams : Promise<{ [key:string] : string|string[]|undefined}>}) {
+  const {system, grade} = await searchParams ;
   const repo = new Repository();
   const userSession = await auth();
   const user = userSession?.user;
@@ -24,7 +25,7 @@ export default async function Home() {
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col relative pb-24">
       {/* Header */}
-      <HomeHeader  user={user}/>
+      <HomeHeader  user={user} system={system} grade={grade} />
       <BigHeroSection username={user.username} />
 
       <main className='px-6 md:px-12 lg:px-24 py-6 flex-1'>
