@@ -7,6 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { GraduationCap } from "lucide-react";
 import { useState } from "react";
 
 export type LabeledSelectOption = {
@@ -21,10 +22,11 @@ type LabeledSelectProps = {
   triggerClassName?: string;
   value?: string;
   defaultValue?: string;
-  onValueChange?: (value: string|null) => void;
+  onValueChange?: (value: string | null) => void;
   disabled?: boolean;
   name?: string;
-  key?:string
+  key?: string
+  children?:React.ReactNode
 };
 
 // Base UI's SelectValue needs a render function to map value -> label.
@@ -38,21 +40,27 @@ export function LabeledSelect({
   onValueChange,
   disabled,
   name,
+  children
 }: LabeledSelectProps) {
-  const [currentValue, setValue] = useState<string|null>(value||null) ;
+  const [currentValue, setValue] = useState<string | null>(value || null);
   const labels = new Map(options.map((o) => [o.value, o.label]));
 
   return (
     <Select
       value={currentValue}
       defaultValue={defaultValue}
-      onValueChange={(val: string|null) => {setValue(val);  onValueChange?.(val)}}
+      onValueChange={(val: string | null) => { setValue(val); onValueChange?.(val) }}
       disabled={disabled}
       name={name}
     >
       <SelectTrigger className={triggerClassName}>
         <SelectValue placeholder={placeholder}>
-          {(val: string) => labels.get(val) ?? val}
+          {(val: string) => (
+            <div className="flex items-center gap-2 text-sm font-medium text-slate-700">
+              {children}
+              <span className="truncate">{labels.get(val) ?? val}</span>
+            </div>
+          )}
         </SelectValue>
       </SelectTrigger>
       <SelectContent>

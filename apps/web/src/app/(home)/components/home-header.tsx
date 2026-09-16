@@ -25,41 +25,35 @@ async function HomeHeader({ user, currentSystemId, currentGradeId, systems, grad
         grades: { id: string, name: string }[]
     }
 ) {
-    const systemOptions = systems.map(sys=>({
-        value : sys.id,
-        label : sys.name
-    })) ;
-    const gradeOptions = grades.map(gr=>({
-        value : gr.id,
-        label : gr.name
-    })) ;
+    const systemOptions = systems.map(sys => ({
+        value: sys.id,
+        label: sys.name
+    }));
+    const gradeOptions = grades.map(gr => ({
+        value: gr.id,
+        label: gr.name
+    }));
 
     return (
         <header className="flex items-center justify-between px-8 py-3 bg-background border-b border-border">
             {/* Logo + name */}
             <div className="flex items-center gap-2">
-                <Image src="/hero.png" alt="here" width={40} height={40} />
+                <Image src="/hero-bird.png" alt="here" width={70} height={70} />
                 <span className="text-xl font-bold text-foreground">Deeply</span>
             </div>
 
             {/* System + Grade + Profile */}
             <div className="flex items-center gap-6">
                 {/* Systeme */}
-                <div className="flex items-center gap-2">
-                    <Globe className="size-5 text-primary" />
-                    <div className="flex flex-col">
-                        <span className="text-xs text-muted-foreground leading-none mb-1">Système</span>
-                        <EducationalSystemSelect options={systemOptions} value={currentSystemId} />
-                    </div>
+                <div className="flex flex-col">
+                    <span className="text-xs text-muted-foreground leading-none mb-1">Système</span>
+                    <EducationalSystemSelect options={systemOptions} value={currentSystemId} />
                 </div>
 
                 {/* Grade */}
-                <div className="flex items-center gap-2">
-                    <GraduationCap className="size-5 text-primary" />
-                    <div className="flex flex-col">
-                        <span className="text-xs text-muted-foreground leading-none mb-1">Grade</span>
-                        <GradeLevelSelect options={gradeOptions} value={currentGradeId} key={currentSystemId}/>
-                    </div>
+                <div className="flex flex-col">
+                    <span className="text-xs text-muted-foreground leading-none mb-1">Grade</span>
+                    <GradeLevelSelect options={gradeOptions} value={currentGradeId} key={currentSystemId} />
                 </div>
 
                 {/* User profile */}
